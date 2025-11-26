@@ -64,6 +64,20 @@
       <div class="register-link">
         Don't have an account? <a routerLink="/register" aria-label="Navigate to registration page">Register here</a>
       </div>
+
+      <div class="demo-mode-toggle">
+        <button 
+          mat-button 
+          type="button"
+          (click)="toggleDemoMode()"
+          [color]="isDemoMode ? 'accent' : 'primary'"
+          aria-label="Toggle demo mode">
+          {{ isDemoMode ? '✓ Demo Mode Active' : 'Enable Demo Mode' }}
+        </button>
+        @if (isDemoMode) {
+          <p class="demo-hint">Demo mode enabled - use any credentials to login</p>
+        }
+      </div>
     </mat-card-content>
   </mat-card>
 </div>

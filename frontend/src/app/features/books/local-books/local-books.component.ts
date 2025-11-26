@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -33,7 +33,8 @@ export class LocalBooksComponent implements OnInit {
 
   constructor(
     private bookService: BookService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -58,6 +59,7 @@ export class LocalBooksComponent implements OnInit {
     ).subscribe(results => {
       this.books = results;
       this.isLoading = false;
+      this.cdr.detectChanges();
     });
   }
 
@@ -77,6 +79,7 @@ export class LocalBooksComponent implements OnInit {
     ).subscribe(results => {
       this.books = results;
       this.isLoading = false;
+      this.cdr.detectChanges();
     });
   }
 

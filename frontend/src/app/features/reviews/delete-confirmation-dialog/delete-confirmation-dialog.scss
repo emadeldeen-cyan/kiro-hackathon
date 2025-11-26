@@ -1,23 +1,25 @@
-@import '../../../styles/variables';
-@import '../../../styles/mixins';
-
 .delete-dialog {
   mat-dialog-content {
-    padding: $spacing-lg;
-    color: $text-primary;
+    padding: 24px;
+    color: rgba(0, 0, 0, 0.87);
 
     p {
       margin: 0;
-      line-height: $line-height-loose;
+      line-height: 1.75;
     }
   }
 
   mat-dialog-actions {
-    padding: $spacing-md $spacing-lg;
-    gap: $spacing-md;
+    padding: 16px 24px;
+    gap: 16px;
 
     button {
-      @include button-hover;
+      transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+
+      &:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+      }
     }
   }
 }

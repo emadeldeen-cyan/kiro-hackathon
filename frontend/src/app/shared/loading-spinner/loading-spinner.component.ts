@@ -11,7 +11,9 @@ import { LoadingService } from '../../core/services/loading.service';
   styleUrls: ['./loading-spinner.component.scss']
 })
 export class LoadingSpinnerComponent {
-  loading$ = this.loadingService.loading$;
+  loading$;
 
-  constructor(private loadingService: LoadingService) {}
+  constructor(private loadingService: LoadingService) {
+    this.loading$ = this.loadingService.loading$;
+  }
 }

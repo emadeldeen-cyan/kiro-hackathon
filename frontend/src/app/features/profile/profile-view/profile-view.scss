@@ -1,184 +1,84 @@
-@import '../../../styles/variables';
-@import '../../../styles/mixins';
-
 .profile-container {
-  @include container;
-  margin: $spacing-xl auto;
-  animation: fadeIn $transition-base;
+  max-width: 1200px;
+  margin: 32px auto;
+  padding: 0 16px;
+  animation: fadeIn 250ms;
 
-  @include respond-to('xs') {
-    padding: 0 $spacing-md;
-  }
-}
+  .profile-card {
+    margin-bottom: 32px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
 
-.loading {
-  text-align: center;
-  padding: $spacing-xl;
-  font-size: $font-size-xl;
-  color: $text-secondary;
-}
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      width: 100%;
 
-.error-message {
-  @include error-message;
-}
+      @media (max-width: 768px) {
+        flex-direction: column;
+        text-align: center;
+      }
 
-.profile-card {
-  margin-bottom: $spacing-xl;
-  @include elevation(1);
-}
+      .avatar,
+      .avatar-placeholder {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+      }
 
-.profile-header {
-  display: flex;
-  align-items: center;
-  gap: $spacing-lg;
-  width: 100%;
+      .avatar {
+        object-fit: cover;
+      }
 
-  @include respond-to('xs') {
-    flex-direction: column;
-    text-align: center;
-  }
-}
+      .avatar-placeholder {
+        background: linear-gradient(135deg, #757de8 0%, #3f51b5 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
-.avatar {
-  width: 80px;
-  height: 80px;
-  border-radius: $border-radius-round;
-  @include image-cover;
-  @include elevation(2);
-}
+        mat-icon {
+          font-size: 48px;
+          width: 48px;
+          height: 48px;
+          color: white;
+        }
+      }
 
-.avatar-placeholder {
-  width: 80px;
-  height: 80px;
-  border-radius: $border-radius-round;
-  background: linear-gradient(135deg, $primary-light 0%, $primary-color 100%);
-  @include flex-center;
-  @include elevation(2);
-  
-  mat-icon {
-    font-size: 48px;
-    width: 48px;
-    height: 48px;
-    color: white;
-  }
-}
+      .profile-info {
+        flex: 1;
 
-.profile-info {
-  flex: 1;
+        h1 {
+          margin-bottom: 8px;
+          color: rgba(0, 0, 0, 0.87);
+        }
 
-  h1 {
-    margin-bottom: $spacing-sm;
-    color: $text-primary;
-  }
-
-  p {
-    color: $text-secondary;
-    line-height: $line-height-loose;
-  }
-}
-
-.reviews-section {
-  h2 {
-    margin-bottom: $spacing-md;
-    color: $text-primary;
-    font-weight: $font-weight-medium;
-  }
-}
-
-.no-reviews {
-  text-align: center;
-  padding: $spacing-xl;
-  color: $text-secondary;
-}
-
-.reviews-list {
-  @include flex-column;
-  gap: $spacing-md;
-}
-
-.review-card {
-  @include smooth-transition(box-shadow);
-
-  &:hover {
-    @include elevation(2);
-  }
-
-  .review-header {
-    width: 100%;
-  }
-
-  .book-link {
-    display: flex;
-    align-items: center;
-    gap: $spacing-md;
-    text-decoration: none;
-    color: inherit;
-    @include smooth-transition(transform);
-    
-    &:hover {
-      transform: translateX(4px);
-
-      .book-info h3 {
-        color: $primary-color;
+        p {
+          color: rgba(0, 0, 0, 0.6);
+          line-height: 1.75;
+        }
       }
     }
+  }
 
-    @include respond-to('xs') {
-      flex-direction: column;
+  .reviews-section {
+    h2 {
+      margin-bottom: 16px;
+      color: rgba(0, 0, 0, 0.87);
+      font-weight: 500;
+    }
+
+    .no-reviews {
       text-align: center;
-    }
-  }
-
-  .book-cover {
-    width: 60px;
-    height: 90px;
-    @include image-cover;
-    border-radius: $border-radius-sm;
-    @include elevation(1);
-  }
-
-  .book-info {
-    h3 {
-      margin: 0;
-      font-size: $font-size-lg;
-      color: $text-primary;
-      @include smooth-transition(color);
+      padding: 32px;
+      color: rgba(0, 0, 0, 0.6);
     }
 
-    .author {
-      margin: $spacing-xs 0 0 0;
-      color: $text-secondary;
-      font-size: $font-size-sm;
+    .reviews-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
     }
-  }
-
-  .rating {
-    display: flex;
-    gap: $spacing-xs;
-    margin-bottom: $spacing-sm;
-
-    mat-icon {
-      font-size: 20px;
-      width: 20px;
-      height: 20px;
-      color: rgba($warning-color, 0.3);
-
-      &.filled {
-        color: $warning-color;
-      }
-    }
-  }
-
-  .review-text {
-    margin: $spacing-sm 0;
-    line-height: $line-height-loose;
-    color: $text-secondary;
-  }
-
-  .review-date {
-    margin: $spacing-sm 0 0 0;
-    font-size: $font-size-sm;
-    color: $text-disabled;
   }
 }
 

@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { Subject, takeUntil } from 'rxjs';
 import { ReviewService } from '../../../core/services/review.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { NotificationService } from '../../../core/services/notification.service';
@@ -26,46 +27,66 @@ import { DeleteConfirmationDialog } from '../delete-confirmation-dialog/delete-c
   templateUrl: './user-reviews.html',
   styleUrl: './user-reviews.scss',
 })
-export class UserReviews implements OnInit {
+export class UserReviews implements OnInit, OnDestroy {
   reviews: ReviewWithBook[] = [];
   isLoading = true;
   errorMessage = '';
+  private destroy$ = new Subject<void>();
 
   constructor(
     private reviewService: ReviewService,
     private authService: AuthService,
     private notificationService: NotificationService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    this.loadUserReviews();
+    // Subscribe to auth state changes
+    this.authService.currentUser$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (user) => {
+          if (user) {
+            this.loadUserReviews(user.id);
+          } else {
+            this.errorMessage = 'You must be logged in to view your reviews';
+            this.isLoading = false;
+            this.cdr.detectChanges();
+          }
+        },
+        error: (error) => {
+          console.error('Error in currentUser$ subscription:', error);
+          this.errorMessage = 'Authentication error';
+          this.isLoading = false;
+          this.cdr.detectChanges();
+        }
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   /**
    * Load reviews for the current user
    */
-  private loadUserReviews(): void {
-    const currentUser = this.authService.getCurrentUser();
-    
-    if (!currentUser) {
-      this.errorMessage = 'You must be logged in to view your reviews';
-      this.isLoading = false;
-      return;
-    }
-
+  private loadUserReviews(userId: string): void {
     this.isLoading = true;
     this.errorMessage = '';
 
-    this.reviewService.getReviewsByUser(currentUser.id).subscribe({
+    this.reviewService.getReviewsByUser(userId).subscribe({
       next: (reviews) => {
         this.reviews = reviews;
         this.isLoading = false;
+        this.cdr.detectChanges();
       },
       error: (error) => {
         console.error('Error loading user reviews:', error);
         this.errorMessage = 'Failed to load your reviews';
         this.isLoading = false;
+        this.cdr.detectChanges();
       }
     });
   }

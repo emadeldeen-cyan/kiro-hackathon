@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { ApiService } from './api.service';
+import { DemoService } from './demo.service';
 import { AuthToken, LoginRequest, RegisterRequest, User } from '../models/auth.models';
 
 @Injectable({
@@ -13,12 +14,22 @@ export class AuthService {
   private currentUserSubject = new BehaviorSubject<User | null>(this.getUserFromStorage());
   public currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor(private apiService: ApiService) {}
+  constructor(
+    private apiService: ApiService,
+    private demoService: DemoService
+  ) {}
 
   /**
    * Register a new user
    */
   register(username: string, email: string, password: string): Observable<AuthToken> {
+    // Use demo mode if enabled
+    if (this.demoService.isDemoMode()) {
+      return this.demoService.demoRegister(username, email, password).pipe(
+        tap(response => this.setSession(response))
+      );
+    }
+    
     const request: RegisterRequest = { username, email, password };
     return this.apiService.post<AuthToken>('/auth/register', request).pipe(
       tap(response => this.setSession(response))
@@ -29,10 +40,38 @@ export class AuthService {
    * Login with username and password
    */
   login(username: string, password: string): Observable<AuthToken> {
+    // Use demo mode if enabled
+    if (this.demoService.isDemoMode()) {
+      return this.demoService.demoLogin(username, password).pipe(
+        tap(response => this.setSession(response))
+      );
+    }
+    
     const request: LoginRequest = { username, password };
     return this.apiService.post<AuthToken>('/auth/login', request).pipe(
       tap(response => this.setSession(response))
     );
+  }
+
+  /**
+   * Enable demo mode
+   */
+  enableDemoMode(): void {
+    this.demoService.enableDemoMode();
+  }
+
+  /**
+   * Disable demo mode
+   */
+  disableDemoMode(): void {
+    this.demoService.disableDemoMode();
+  }
+
+  /**
+   * Check if demo mode is enabled
+   */
+  isDemoMode(): boolean {
+    return this.demoService.isDemoMode();
   }
 
   /**

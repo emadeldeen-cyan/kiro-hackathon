@@ -44,6 +44,27 @@ ng serve
 
 The application will be available at `http://localhost:4200/`. The proxy is configured to forward `/api` requests to `http://localhost:3000`.
 
+## 🎭 Demo Mode (No Backend Required!)
+
+You can test the application **without setting up a backend** using Demo Mode:
+
+1. Start the development server: `npm start`
+2. Navigate to `http://localhost:4200/login`
+3. Click **"Enable Demo Mode"** button
+4. Login with any credentials (pre-filled: demo/demo)
+
+Demo mode includes:
+- ✅ Full authentication flow
+- ✅ 3 sample books with reviews
+- ✅ Profile management
+- ✅ Review creation, editing, and deletion
+- ✅ Book search functionality
+- ✅ All UI features
+
+**Note:** Demo data is stored in memory and resets on page refresh.
+
+For more details, see [DEMO_MODE.md](./DEMO_MODE.md)
+
 ## Environment Configuration
 
 The application uses environment files to configure the backend API URL:

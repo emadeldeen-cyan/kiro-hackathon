@@ -1,23 +1,25 @@
-@import '../../../styles/variables';
-@import '../../../styles/mixins';
-
 .review-dialog {
   min-width: 400px;
 
-  @include respond-to('xs') {
+  @media (max-width: 576px) {
     min-width: 300px;
   }
 
   mat-dialog-content {
-    padding: $spacing-lg;
+    padding: 24px;
   }
 
   mat-dialog-actions {
-    padding: $spacing-md $spacing-lg;
-    gap: $spacing-md;
+    padding: 16px 24px;
+    gap: 16px;
 
     button {
-      @include button-hover;
+      transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+
+      &:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+      }
     }
   }
 }

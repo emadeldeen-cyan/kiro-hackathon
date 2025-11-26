@@ -29,6 +29,7 @@ export class LoginComponent implements OnInit {
   errorMessage: string = '';
   isLoading: boolean = false;
   returnUrl: string = '/';
+  isDemoMode: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -46,6 +47,34 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     // Get return URL from route parameters or default to '/'
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+    
+    // Check if demo mode is enabled
+    this.isDemoMode = this.authService.isDemoMode();
+    
+    // Pre-fill demo credentials if in demo mode
+    if (this.isDemoMode) {
+      this.loginForm.patchValue({
+        username: 'demo',
+        password: 'demo'
+      });
+    }
+  }
+
+  toggleDemoMode(): void {
+    if (this.isDemoMode) {
+      this.authService.disableDemoMode();
+      this.isDemoMode = false;
+      this.loginForm.reset();
+      this.notificationService.info('Demo mode disabled');
+    } else {
+      this.authService.enableDemoMode();
+      this.isDemoMode = true;
+      this.loginForm.patchValue({
+        username: 'demo',
+        password: 'demo'
+      });
+      this.notificationService.success('Demo mode enabled - use any credentials to login');
+    }
   }
 
   onSubmit(): void {
