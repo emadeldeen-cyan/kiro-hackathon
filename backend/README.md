@@ -17,14 +17,14 @@ npm install
 
 2. Configure environment variables:
 ```bash
+# .env file is already created with in-memory database
+# No PostgreSQL required for development!
+
+# If you need to recreate it:
 cp .env.example .env
-# Edit .env with your database credentials
 ```
 
-3. Ensure PostgreSQL is running and create the database:
-```bash
-createdb book_management
-```
+**Note:** By default, the application uses an **in-memory database** (no PostgreSQL required). To use PostgreSQL instead, set `USE_IN_MEMORY=false` in `.env` and configure the database connection.
 
 ## Running the Application
 

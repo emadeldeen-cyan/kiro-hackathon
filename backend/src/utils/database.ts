@@ -14,6 +14,12 @@ export const pool = new Pool({
 
 // Test database connection
 export async function testConnection(): Promise<boolean> {
+  // Skip database connection if using in-memory storage
+  if (process.env.USE_IN_MEMORY === 'true' || !process.env.DB_HOST) {
+    console.log('Using in-memory database (no PostgreSQL connection required)');
+    return true;
+  }
+
   try {
     const client = await pool.connect();
     await client.query('SELECT NOW()');
@@ -22,12 +28,19 @@ export async function testConnection(): Promise<boolean> {
     return true;
   } catch (error) {
     console.error('Database connection failed:', error);
+    console.log('Tip: Set USE_IN_MEMORY=true in .env to use in-memory database');
     return false;
   }
 }
 
 // Initialize database tables
 export async function initializeDatabase(): Promise<void> {
+  // Skip database initialization if using in-memory storage
+  if (process.env.USE_IN_MEMORY === 'true' || !process.env.DB_HOST) {
+    console.log('Skipping database initialization (using in-memory storage)');
+    return;
+  }
+
   const client = await pool.connect();
   
   try {
