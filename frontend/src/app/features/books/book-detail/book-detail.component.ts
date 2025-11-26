@@ -243,4 +243,11 @@ export class BookDetailComponent implements OnInit {
       day: 'numeric'
     });
   }
+
+  /**
+   * TrackBy function for ngFor performance
+   */
+  trackByReviewId(index: number, review: Review): string {
+    return review.id;
+  }
 }

@@ -1,31 +1,38 @@
+@import '../../../styles/variables';
+@import '../../../styles/mixins';
+
 .login-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  @include flex-center;
   min-height: 100vh;
-  padding: 20px;
+  padding: $spacing-lg;
+  background: linear-gradient(135deg, rgba($primary-color, 0.05) 0%, rgba($accent-color, 0.05) 100%);
 }
 
 mat-card {
   max-width: 400px;
   width: 100%;
+  @include elevation(2);
+  animation: fadeInUp $transition-slow;
+
+  @include respond-to('xs') {
+    padding: $spacing-md;
+  }
 }
 
 mat-card-header {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
+  @include flex-center;
+  margin-bottom: $spacing-lg;
 }
 
 mat-card-title {
-  font-size: 24px;
-  font-weight: 500;
+  font-size: $font-size-xxl;
+  font-weight: $font-weight-medium;
+  color: $primary-color;
 }
 
 form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+  @include flex-column;
+  gap: $spacing-md;
 }
 
 .full-width {
@@ -33,25 +40,41 @@ form {
 }
 
 .error-message {
-  color: #f44336;
-  font-size: 14px;
-  margin-bottom: 16px;
-  padding: 8px;
-  background-color: #ffebee;
-  border-radius: 4px;
+  @include error-message;
+  animation: shake $transition-fast;
 }
 
 .register-link {
   text-align: center;
-  margin-top: 16px;
-  font-size: 14px;
+  margin-top: $spacing-md;
+  font-size: $font-size-sm;
+  color: $text-secondary;
+
+  a {
+    @include link;
+    font-weight: $font-weight-medium;
+  }
 }
 
-.register-link a {
-  color: #3f51b5;
-  text-decoration: none;
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.register-link a:hover {
-  text-decoration: underline;
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
 }

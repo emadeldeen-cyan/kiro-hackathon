@@ -1,0 +1,23 @@
+@import '../../../styles/variables';
+@import '../../../styles/mixins';
+
+.review-dialog {
+  min-width: 400px;
+
+  @include respond-to('xs') {
+    min-width: 300px;
+  }
+
+  mat-dialog-content {
+    padding: $spacing-lg;
+  }
+
+  mat-dialog-actions {
+    padding: $spacing-md $spacing-lg;
+    gap: $spacing-md;
+
+    button {
+      @include button-hover;
+    }
+  }
+}

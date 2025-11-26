@@ -4,3 +4,4 @@ export * from './profile.service';
 export * from './review.service';
 export * from './book.service';
 export * from './notification.service';
+export * from './loading.service';

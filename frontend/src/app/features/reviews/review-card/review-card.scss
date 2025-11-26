@@ -1,9 +1,16 @@
+@import '../../../styles/variables';
+@import '../../../styles/mixins';
+
 .review-card {
-  margin-bottom: 1rem;
+  margin-bottom: $spacing-md;
+  @include smooth-transition(box-shadow);
+
+  &:hover {
+    @include elevation(2);
+  }
 
   .review-header {
-    display: flex;
-    justify-content: space-between;
+    @include flex-between;
     align-items: flex-start;
     width: 100%;
   }
@@ -13,69 +20,75 @@
   }
 
   .rating {
-    margin-bottom: 0.5rem;
+    margin-bottom: $spacing-sm;
 
     .star {
-      font-size: 1.2rem;
-      color: #ddd;
+      font-size: $font-size-xl;
+      color: $divider-color;
       
       &.filled {
-        color: #ffc107;
+        color: $warning-color;
       }
     }
   }
 
   .reviewer-info {
     display: flex;
-    gap: 0.5rem;
+    gap: $spacing-sm;
     align-items: center;
-    font-size: 0.875rem;
-    color: #666;
+    font-size: $font-size-sm;
+    color: $text-secondary;
 
     .reviewer-name a {
-      color: #1976d2;
-      text-decoration: none;
-      font-weight: 500;
-
-      &:hover {
-        text-decoration: underline;
-      }
+      @include link;
+      font-weight: $font-weight-medium;
     }
 
     .review-date {
-      color: #999;
+      color: $text-disabled;
     }
 
     .edited-label {
-      color: #999;
+      color: $text-disabled;
       font-style: italic;
     }
   }
 
   .actions {
     display: flex;
-    gap: 0.25rem;
+    gap: $spacing-xs;
+
+    button {
+      @include smooth-transition(transform);
+
+      &:hover {
+        transform: scale(1.1);
+      }
+    }
   }
 
   mat-card-content {
-    padding-top: 1rem;
+    padding-top: $spacing-md;
   }
 
   .book-info {
-    margin-bottom: 1rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid #eee;
+    margin-bottom: $spacing-md;
+    padding-bottom: $spacing-md;
+    border-bottom: 1px solid $divider-color;
 
     .book-link {
       display: flex;
-      gap: 1rem;
+      gap: $spacing-md;
       text-decoration: none;
       color: inherit;
       align-items: center;
+      @include smooth-transition(transform);
 
       &:hover {
+        transform: translateX(4px);
+
         .book-details h4 {
-          color: #1976d2;
+          color: $primary-color;
         }
       }
     }
@@ -83,28 +96,30 @@
     .book-cover {
       width: 60px;
       height: 90px;
-      object-fit: cover;
-      border-radius: 4px;
+      @include image-cover;
+      border-radius: $border-radius-sm;
+      @include elevation(1);
     }
 
     .book-details {
       h4 {
-        margin: 0 0 0.25rem 0;
-        font-size: 1rem;
-        transition: color 0.2s;
+        margin: 0 0 $spacing-xs 0;
+        font-size: $font-size-base;
+        @include smooth-transition(color);
       }
 
       p {
         margin: 0;
-        color: #666;
-        font-size: 0.875rem;
+        color: $text-secondary;
+        font-size: $font-size-sm;
       }
     }
   }
 
   .review-text {
     margin: 0;
-    line-height: 1.6;
+    line-height: $line-height-loose;
     white-space: pre-wrap;
+    color: $text-secondary;
   }
 }

@@ -6,6 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { ProfileService } from '../../../core/services/profile.service';
+import { NotificationService } from '../../../core/services/notification.service';
 import { Profile, CreateProfileRequest, UpdateProfileRequest } from '../../../core/models/profile.models';
 
 @Component({
@@ -32,7 +33,8 @@ export class ProfileForm implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private profileService: ProfileService
+    private profileService: ProfileService,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -71,6 +73,7 @@ export class ProfileForm implements OnInit {
       this.profileService.updateProfile(this.userId, updateData).subscribe({
         next: (profile) => {
           this.isSubmitting = false;
+          this.notificationService.success('Profile updated successfully');
           this.profileSaved.emit(profile);
         },
         error: (error) => {
@@ -89,6 +92,7 @@ export class ProfileForm implements OnInit {
       this.profileService.createProfile(this.userId, createData).subscribe({
         next: (profile) => {
           this.isSubmitting = false;
+          this.notificationService.success('Profile created successfully');
           this.profileSaved.emit(profile);
         },
         error: (error) => {

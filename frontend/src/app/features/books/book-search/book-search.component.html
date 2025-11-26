@@ -1,5 +1,5 @@
 <div class="book-search-container">
-  <h1>Search OpenLibrary</h1>
+  <h1 id="page-title">Search OpenLibrary</h1>
   
   <mat-form-field appearance="outline" class="search-field">
     <mat-label>Search for books</mat-label>
@@ -7,30 +7,32 @@
       matInput 
       [formControl]="searchControl" 
       placeholder="Enter book title, author, or ISBN"
-      type="text">
+      type="search"
+      aria-label="Search for books by title, author, or ISBN"
+      aria-describedby="page-title">
   </mat-form-field>
 
-  <div *ngIf="errorMessage" class="error-message">
+  <div *ngIf="errorMessage" class="error-message" role="alert" aria-live="polite">
     {{ errorMessage }}
   </div>
 
-  <div *ngIf="isLoading" class="loading-container">
-    <mat-spinner></mat-spinner>
+  <div *ngIf="isLoading" class="loading-container" role="status" aria-live="polite">
+    <mat-spinner aria-label="Loading search results"></mat-spinner>
   </div>
 
   <div *ngIf="!isLoading && searchResults.length > 0" class="results-container">
-    <h2>Search Results</h2>
-    <div class="results-grid">
-      <mat-card *ngFor="let book of searchResults" class="book-card">
+    <h2 id="results-heading">Search Results</h2>
+    <div class="results-grid" role="list" aria-labelledby="results-heading">
+      <mat-card *ngFor="let book of searchResults; trackBy: trackByKey" class="book-card" role="listitem">
         <img 
           mat-card-image 
           [src]="getCoverImageUrl(book.cover_i)" 
-          [alt]="book.title"
+          [alt]="'Cover image for ' + book.title"
           class="book-cover">
         <mat-card-content>
           <h3 class="book-title">{{ book.title }}</h3>
-          <p class="book-author">{{ getAuthorName(book.author_name) }}</p>
-          <p *ngIf="book.first_publish_year" class="book-year">
+          <p class="book-author" aria-label="Author">{{ getAuthorName(book.author_name) }}</p>
+          <p *ngIf="book.first_publish_year" class="book-year" aria-label="Publication year">
             Published: {{ book.first_publish_year }}
           </p>
         </mat-card-content>
@@ -39,7 +41,9 @@
             mat-raised-button 
             color="primary" 
             (click)="addToLibrary(book)"
-            [disabled]="isAddingBook(book)">
+            [disabled]="isAddingBook(book)"
+            [attr.aria-label]="'Add ' + book.title + ' to library'"
+            [attr.aria-busy]="isAddingBook(book)">
             {{ isAddingBook(book) ? 'Adding...' : 'Add to Library' }}
           </button>
         </mat-card-actions>
@@ -47,7 +51,7 @@
     </div>
   </div>
 
-  <div *ngIf="!isLoading && searchControl.value && searchResults.length === 0 && !errorMessage" class="no-results">
+  <div *ngIf="!isLoading && searchControl.value && searchResults.length === 0 && !errorMessage" class="no-results" role="status" aria-live="polite">
     <p>No books found. Try a different search term.</p>
   </div>
 </div>

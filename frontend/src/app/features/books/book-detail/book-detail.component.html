@@ -1,43 +1,43 @@
 <div class="book-detail-container">
-  <div *ngIf="isLoading" class="loading-container">
-    <mat-spinner></mat-spinner>
+  <div *ngIf="isLoading" class="loading-container" role="status" aria-live="polite">
+    <mat-spinner aria-label="Loading book details"></mat-spinner>
   </div>
 
-  <div *ngIf="errorMessage && !isLoading" class="error-message">
+  <div *ngIf="errorMessage && !isLoading" class="error-message" role="alert" aria-live="polite">
     {{ errorMessage }}
   </div>
 
   <div *ngIf="book && !isLoading" class="book-detail">
-    <div class="book-header">
+    <article class="book-header">
       <div class="book-cover-section">
         <img 
           [src]="getCoverImageUrl()" 
-          [alt]="book.title"
+          [alt]="'Cover image for ' + book.title + ' by ' + book.author"
           class="book-cover">
       </div>
 
       <div class="book-info-section">
-        <h1 class="book-title">{{ book.title }}</h1>
+        <h1 class="book-title" id="book-title">{{ book.title }}</h1>
         <h2 class="book-author">by {{ book.author }}</h2>
         
-        <div class="book-metadata">
-          <p *ngIf="book.isbn" class="metadata-item">
+        <div class="book-metadata" role="list" aria-label="Book metadata">
+          <p *ngIf="book.isbn" class="metadata-item" role="listitem">
             <strong>ISBN:</strong> {{ book.isbn }}
           </p>
-          <p class="metadata-item">
+          <p class="metadata-item" role="listitem">
             <strong>OpenLibrary Key:</strong> {{ book.openLibraryKey }}
           </p>
         </div>
 
-        <div class="rating-section" *ngIf="reviews.length > 0">
+        <div class="rating-section" *ngIf="reviews.length > 0" role="region" aria-label="Book rating">
           <div class="average-rating">
-            <span class="rating-stars">{{ getStarRating(getAverageRating()!) }}</span>
-            <span class="rating-text">{{ getAverageRating()!.toFixed(1) }} / 5.0</span>
+            <span class="rating-stars" aria-label="Average rating">{{ getStarRating(getAverageRating()!) }}</span>
+            <span class="rating-text">{{ getAverageRating()!.toFixed(1) }} out of 5.0</span>
           </div>
-          <p class="review-count">{{ reviews.length }} {{ reviews.length === 1 ? 'review' : 'reviews' }}</p>
+          <p class="review-count">Based on {{ reviews.length }} {{ reviews.length === 1 ? 'review' : 'reviews' }}</p>
         </div>
 
-        <div class="rating-section" *ngIf="reviews.length === 0">
+        <div class="rating-section" *ngIf="reviews.length === 0" role="status">
           <p class="no-reviews">No reviews yet. Be the first to review this book!</p>
         </div>
 
@@ -46,39 +46,42 @@
             mat-raised-button 
             color="primary" 
             (click)="writeReview()"
-            *ngIf="isAuthenticated() && !userHasReviewed">
+            *ngIf="isAuthenticated() && !userHasReviewed"
+            aria-label="Write a review for this book">
             Write a Review
           </button>
           <button 
             mat-raised-button 
             disabled
-            *ngIf="isAuthenticated() && userHasReviewed">
+            *ngIf="isAuthenticated() && userHasReviewed"
+            aria-label="You have already reviewed this book">
             You've already reviewed this book
           </button>
           <button 
             mat-raised-button 
             color="primary"
             routerLink="/login"
-            *ngIf="!isAuthenticated()">
+            *ngIf="!isAuthenticated()"
+            aria-label="Login to write a review">
             Login to Write a Review
           </button>
         </div>
       </div>
-    </div>
+    </article>
 
-    <mat-divider></mat-divider>
+    <mat-divider role="separator"></mat-divider>
 
-    <div class="book-description" *ngIf="book.description">
-      <h3>Description</h3>
+    <section class="book-description" *ngIf="book.description" aria-labelledby="description-heading">
+      <h3 id="description-heading">Description</h3>
       <p>{{ book.description }}</p>
-    </div>
+    </section>
 
-    <mat-divider *ngIf="book.description"></mat-divider>
+    <mat-divider *ngIf="book.description" role="separator"></mat-divider>
 
-    <div class="reviews-section">
-      <h3>Reviews</h3>
+    <section class="reviews-section" aria-labelledby="reviews-heading">
+      <h3 id="reviews-heading">Reviews</h3>
       
-      <div *ngIf="showReviewForm && book" class="review-form-section">
+      <div *ngIf="showReviewForm && book" class="review-form-section" role="region" aria-label="Write a review">
         <app-review-form
           [bookId]="book.id"
           [mode]="'create'"
@@ -87,19 +90,20 @@
         </app-review-form>
       </div>
       
-      <div *ngIf="reviews.length === 0 && !showReviewForm" class="no-reviews-message">
+      <div *ngIf="reviews.length === 0 && !showReviewForm" class="no-reviews-message" role="status">
         <p>No reviews yet for this book.</p>
       </div>
 
-      <div *ngIf="reviews.length > 0" class="reviews-list">
+      <div *ngIf="reviews.length > 0" class="reviews-list" role="list" aria-label="Book reviews">
         <app-review-card
-          *ngFor="let review of reviews"
+          *ngFor="let review of reviews; trackBy: trackByReviewId"
           [review]="review"
           [showBookInfo]="false"
           (editClicked)="onEditReview($event)"
-          (deleteClicked)="onDeleteReview($event)">
+          (deleteClicked)="onDeleteReview($event)"
+          role="listitem">
         </app-review-card>
       </div>
-    </div>
+    </section>
   </div>
 </div>

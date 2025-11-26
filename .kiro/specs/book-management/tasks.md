@@ -393,8 +393,8 @@
   - Handle empty state when user has no reviews
   - _Requirements: 6.1, 6.2, 6.3_
 
-- [ ] 17. Implement navigation and layout
-- [ ] 17.1 Create navigation component
+- [x] 17. Implement navigation and layout
+- [x] 17.1 Create navigation component
   - Generate navbar component with Angular CLI
   - Add navigation links using routerLink (Home, Search Books, My Library, My Reviews, Profile)
   - Show login/register links for unauthenticated users (check AuthService)
@@ -403,7 +403,7 @@
   - Make navigation responsive for mobile using Angular Material or Bootstrap
   - _Requirements: All_
 
-- [ ] 17.2 Create main layout component
+- [x] 17.2 Create main layout component
   - Generate app-layout component with Angular CLI
   - Include navbar component in header
   - Add router-outlet for content area
@@ -411,29 +411,29 @@
   - Implement responsive design
   - _Requirements: All_
 
-- [ ] 17.3 Configure routing module
+- [x] 17.3 Configure routing module
   - Set up all application routes in app-routing.module.ts
   - Apply AuthGuard to protected routes
   - Configure lazy loading for feature modules if needed
   - Set up route redirects (default route, after login, etc.)
   - _Requirements: All_
 
-- [ ] 18. Add error handling and loading states
-- [ ] 18.1 Create HTTP error interceptor
+- [x] 18. Add error handling and loading states
+- [x] 18.1 Create HTTP error interceptor
   - Implement HttpInterceptor to catch HTTP errors globally
   - Handle 401 errors by redirecting to login
   - Handle 403, 404, 500 errors with appropriate messages
   - Log errors for debugging
   - _Requirements: All_
 
-- [ ] 18.2 Create loading interceptor and spinner
+- [x] 18.2 Create loading interceptor and spinner
   - Generate loading-spinner component with Angular CLI
   - Implement HttpInterceptor to track pending requests
   - Create LoadingService to manage loading state
   - Display spinner overlay when requests are pending
   - _Requirements: All_
 
-- [ ] 18.3 Implement toast notification service
+- [x] 18.3 Implement toast notification service
   - Install Angular toast library (ngx-toastr or Angular Material Snackbar)
   - Create NotificationService wrapper
   - Show success messages for operations (review created, profile updated, etc.)
@@ -441,8 +441,8 @@
   - Use in all components for user feedback
   - _Requirements: All_
 
-- [ ] 19. Polish UI and add styling
-- [ ] 19.1 Apply consistent styling
+- [x] 19. Polish UI and add styling
+- [x] 19.1 Apply consistent styling
   - Choose and implement Angular Material or Bootstrap for Angular
   - Configure theme with consistent color scheme and typography
   - Style all components with responsive design
@@ -450,7 +450,7 @@
   - Create reusable SCSS mixins and variables
   - _Requirements: All_
 
-- [ ] 19.2 Improve accessibility
+- [x] 19.2 Improve accessibility
   - Add proper ARIA labels to all interactive elements
   - Ensure keyboard navigation works (tab order, enter/space for actions)
   - Test with screen readers

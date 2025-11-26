@@ -1,47 +1,68 @@
+@import '../../../styles/variables';
+@import '../../../styles/mixins';
+
 .user-reviews-container {
   max-width: 900px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: $spacing-xl;
+  animation: fadeIn $transition-base;
+
+  @include respond-to('xs') {
+    padding: $spacing-md;
+  }
 
   h1 {
-    margin-bottom: 2rem;
-    color: #333;
+    margin-bottom: $spacing-xl;
+    color: $text-primary;
+    font-weight: $font-weight-medium;
   }
 
   .loading-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    @include flex-center;
     min-height: 300px;
   }
 
   .error-message {
     mat-card {
-      background-color: #ffebee;
-      color: #c62828;
+      background-color: rgba($error-color, 0.1);
+      color: $error-color;
+      border-left: 4px solid $error-color;
     }
   }
 
   .empty-state {
     mat-card {
       text-align: center;
-      padding: 3rem 2rem;
+      padding: $spacing-xxl $spacing-xl;
+      background: linear-gradient(135deg, rgba($primary-color, 0.05) 0%, rgba($accent-color, 0.05) 100%);
 
       p {
-        font-size: 1.1rem;
-        color: #666;
-        margin-bottom: 1rem;
+        font-size: $font-size-lg;
+        color: $text-secondary;
+        margin-bottom: $spacing-md;
 
         &:last-of-type {
-          margin-bottom: 2rem;
+          margin-bottom: $spacing-xl;
         }
+      }
+
+      button {
+        @include button-hover;
       }
     }
   }
 
   .reviews-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+    @include flex-column;
+    gap: $spacing-md;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }

@@ -1,16 +1,25 @@
 <div class="register-container">
-  <mat-card>
+  <mat-card role="main" aria-labelledby="register-title">
     <mat-card-header>
-      <mat-card-title>Register</mat-card-title>
+      <mat-card-title id="register-title">Register</mat-card-title>
     </mat-card-header>
     
     <mat-card-content>
-      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" aria-label="Registration form">
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Username</mat-label>
-          <input matInput formControlName="username" type="text" required>
+          <input 
+            matInput 
+            formControlName="username" 
+            type="text" 
+            required
+            aria-label="Username (minimum 3 characters)"
+            aria-required="true"
+            aria-describedby="username-hint"
+            autocomplete="username">
+          <mat-hint id="username-hint">Minimum 3 characters</mat-hint>
           @if (username?.invalid && username?.touched) {
-            <mat-error>
+            <mat-error role="alert">
               @if (username?.errors?.['required']) {
                 Username is required
               }
@@ -23,9 +32,16 @@
 
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Email</mat-label>
-          <input matInput formControlName="email" type="email" required>
+          <input 
+            matInput 
+            formControlName="email" 
+            type="email" 
+            required
+            aria-label="Email address"
+            aria-required="true"
+            autocomplete="email">
           @if (email?.invalid && email?.touched) {
-            <mat-error>
+            <mat-error role="alert">
               @if (email?.errors?.['required']) {
                 Email is required
               }
@@ -38,9 +54,18 @@
 
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Password</mat-label>
-          <input matInput formControlName="password" type="password" required>
+          <input 
+            matInput 
+            formControlName="password" 
+            type="password" 
+            required
+            aria-label="Password (minimum 8 characters)"
+            aria-required="true"
+            aria-describedby="password-hint"
+            autocomplete="new-password">
+          <mat-hint id="password-hint">Minimum 8 characters</mat-hint>
           @if (password?.invalid && password?.touched) {
-            <mat-error>
+            <mat-error role="alert">
               @if (password?.errors?.['required']) {
                 Password is required
               }
@@ -52,7 +77,7 @@
         </mat-form-field>
 
         @if (errorMessage) {
-          <div class="error-message">
+          <div class="error-message" role="alert" aria-live="polite">
             {{ errorMessage }}
           </div>
         }
@@ -62,9 +87,10 @@
           color="primary" 
           type="submit" 
           [disabled]="registerForm.invalid || isLoading"
+          [attr.aria-busy]="isLoading"
           class="full-width">
           @if (isLoading) {
-            Registering...
+            <span aria-live="polite">Registering...</span>
           } @else {
             Register
           }
@@ -72,7 +98,7 @@
       </form>
 
       <div class="login-link">
-        Already have an account? <a routerLink="/login">Login here</a>
+        Already have an account? <a routerLink="/login" aria-label="Navigate to login page">Login here</a>
       </div>
     </mat-card-content>
   </mat-card>

@@ -125,4 +125,11 @@ export class BookSearchComponent implements OnInit {
   isAddingBook(book: OpenLibrarySearchResult): boolean {
     return this.addingBookKey === book.key;
   }
+
+  /**
+   * TrackBy function for ngFor performance
+   */
+  trackByKey(index: number, book: OpenLibrarySearchResult): string {
+    return book.key;
+  }
 }

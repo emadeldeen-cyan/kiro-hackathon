@@ -1,14 +1,124 @@
-/* You can add global styles to this file, and also import other style files */
+/* Import Angular Material theming */
+@use '@angular/material' as mat;
+
+/* Import custom variables and mixins */
+@import 'styles/variables';
+@import 'styles/mixins';
+
+/* Include the common styles for Angular Material */
+@include mat.core();
+
+/* Define the theme */
+$book-management-primary: mat.define-palette(mat.$indigo-palette);
+$book-management-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+$book-management-warn: mat.define-palette(mat.$red-palette);
+
+$book-management-theme: mat.define-light-theme((
+  color: (
+    primary: $book-management-primary,
+    accent: $book-management-accent,
+    warn: $book-management-warn,
+  ),
+  typography: mat.define-typography-config(),
+  density: 0,
+));
+
+/* Include theme styles for core and each component */
+@include mat.all-component-themes($book-management-theme);
+
+/* Global styles */
+* {
+  box-sizing: border-box;
+}
 
 html, body {
   height: 100%;
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  padding: 0;
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  line-height: $line-height-base;
+  color: $text-primary;
+  background-color: $background-color;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  margin: 0 0 $spacing-md 0;
+  font-weight: $font-weight-medium;
+  line-height: $line-height-tight;
+}
+
+h1 {
+  font-size: $font-size-xxxl;
+}
+
+h2 {
+  font-size: $font-size-xxl;
+}
+
+h3 {
+  font-size: $font-size-xl;
+}
+
+h4 {
+  font-size: $font-size-lg;
+}
+
+p {
+  margin: 0 0 $spacing-md 0;
+}
+
+a {
+  @include link;
+}
+
+/* Utility classes */
+.container {
+  @include container;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-truncate {
+  @include text-truncate;
+}
+
+.mt-0 { margin-top: 0; }
+.mt-1 { margin-top: $spacing-sm; }
+.mt-2 { margin-top: $spacing-md; }
+.mt-3 { margin-top: $spacing-lg; }
+.mt-4 { margin-top: $spacing-xl; }
+
+.mb-0 { margin-bottom: 0; }
+.mb-1 { margin-bottom: $spacing-sm; }
+.mb-2 { margin-bottom: $spacing-md; }
+.mb-3 { margin-bottom: $spacing-lg; }
+.mb-4 { margin-bottom: $spacing-xl; }
+
+.pt-0 { padding-top: 0; }
+.pt-1 { padding-top: $spacing-sm; }
+.pt-2 { padding-top: $spacing-md; }
+.pt-3 { padding-top: $spacing-lg; }
+.pt-4 { padding-top: $spacing-xl; }
+
+.pb-0 { padding-bottom: 0; }
+.pb-1 { padding-bottom: $spacing-sm; }
+.pb-2 { padding-bottom: $spacing-md; }
+.pb-3 { padding-bottom: $spacing-lg; }
+.pb-4 { padding-bottom: $spacing-xl; }
 
 /* Snackbar notification styles */
 .success-snackbar {
-  background-color: #4caf50 !important;
+  background-color: $success-color !important;
   color: white !important;
   
   .mat-mdc-button {
@@ -17,7 +127,7 @@ html, body {
 }
 
 .error-snackbar {
-  background-color: #f44336 !important;
+  background-color: $error-color !important;
   color: white !important;
   
   .mat-mdc-button {
@@ -26,10 +136,68 @@ html, body {
 }
 
 .info-snackbar {
-  background-color: #2196f3 !important;
+  background-color: $info-color !important;
   color: white !important;
   
   .mat-mdc-button {
     color: white !important;
   }
+}
+
+/* Material Design enhancements */
+.mat-mdc-card {
+  @include smooth-transition(box-shadow);
+}
+
+.mat-mdc-button,
+.mat-mdc-raised-button,
+.mat-mdc-flat-button {
+  @include button-hover;
+}
+
+/* Loading state */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.8);
+  @include flex-center;
+  z-index: $z-index-modal;
+}
+
+/* Custom scrollbar */
+* {
+  @include custom-scrollbar;
+}
+
+/* Focus visible for accessibility */
+button, a, input, select, textarea {
+  @include focus-visible;
+}
+
+/* Responsive images */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Form elements */
+.full-width {
+  width: 100%;
+}
+
+.form-field {
+  @include form-field;
+}
+
+.error-message {
+  @include error-message;
+  margin-bottom: $spacing-md;
+}
+
+.success-message {
+  @include success-message;
+  margin-bottom: $spacing-md;
 }

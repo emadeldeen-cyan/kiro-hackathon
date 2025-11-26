@@ -1,0 +1,23 @@
+@import '../../../styles/variables';
+@import '../../../styles/mixins';
+
+.delete-dialog {
+  mat-dialog-content {
+    padding: $spacing-lg;
+    color: $text-primary;
+
+    p {
+      margin: 0;
+      line-height: $line-height-loose;
+    }
+  }
+
+  mat-dialog-actions {
+    padding: $spacing-md $spacing-lg;
+    gap: $spacing-md;
+
+    button {
+      @include button-hover;
+    }
+  }
+}

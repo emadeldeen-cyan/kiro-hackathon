@@ -8,15 +8,60 @@ import { ProfileView } from './features/profile/profile-view/profile-view';
 import { ProfileForm } from './features/profile/profile-form/profile-form';
 import { UserReviews } from './features/reviews/user-reviews/user-reviews';
 import { authGuard } from './core/guards/auth.guard';
+import { AppLayoutComponent } from './shared/layout/app-layout.component';
 
 export const routes: Routes = [
-  { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
-  { path: 'books/search', component: BookSearchComponent, canActivate: [authGuard] },
-  { path: 'books/library', component: LocalBooksComponent, canActivate: [authGuard] },
-  { path: 'books/:id', component: BookDetailComponent, canActivate: [authGuard] },
-  { path: 'profile/:userId', component: ProfileView, canActivate: [authGuard] },
-  { path: 'profile', component: ProfileForm, canActivate: [authGuard] },
-  { path: 'reviews/my-reviews', component: UserReviews, canActivate: [authGuard] },
-  { path: '', redirectTo: '/login', pathMatch: 'full' }
+  // Auth routes without layout
+  { 
+    path: 'login', 
+    component: LoginComponent 
+  },
+  { 
+    path: 'register', 
+    component: RegisterComponent 
+  },
+  
+  // Protected routes with layout
+  {
+    path: '',
+    component: AppLayoutComponent,
+    canActivate: [authGuard],
+    children: [
+      { 
+        path: '', 
+        redirectTo: '/books/library', 
+        pathMatch: 'full' 
+      },
+      { 
+        path: 'books/search', 
+        component: BookSearchComponent 
+      },
+      { 
+        path: 'books/library', 
+        component: LocalBooksComponent 
+      },
+      { 
+        path: 'books/:id', 
+        component: BookDetailComponent 
+      },
+      { 
+        path: 'profile/:userId', 
+        component: ProfileView 
+      },
+      { 
+        path: 'profile', 
+        component: ProfileForm 
+      },
+      { 
+        path: 'reviews/my-reviews', 
+        component: UserReviews 
+      }
+    ]
+  },
+  
+  // Fallback route
+  { 
+    path: '**', 
+    redirectTo: '/login' 
+  }
 ];

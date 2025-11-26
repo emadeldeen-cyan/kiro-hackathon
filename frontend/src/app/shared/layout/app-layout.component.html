@@ -1,0 +1,40 @@
+<div class="app-layout">
+  <!-- Header with Navigation -->
+  <header class="app-header">
+    <app-navbar></app-navbar>
+  </header>
+
+  <!-- Main Content Area -->
+  <main class="app-content">
+    <div class="content-container">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>Book Management System</h3>
+          <p>Discover, review, and manage your reading journey.</p>
+        </div>
+        <div class="footer-section">
+          <h4>Features</h4>
+          <ul>
+            <li>Search books via OpenLibrary</li>
+            <li>Write and manage reviews</li>
+            <li>Track your reading history</li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>About</h4>
+          <p>Built with Angular and powered by OpenLibrary API</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; {{ currentYear }} Book Management System. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+</div>
