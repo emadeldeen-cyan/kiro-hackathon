@@ -204,21 +204,21 @@
   - **Property 22: Local search results completeness**
   - **Validates: Requirements 7.4**
 
-- [ ] 9. Implement REST API endpoints
-- [ ] 9.1 Create authentication endpoints
+- [x] 9. Implement REST API endpoints
+- [x] 9.1 Create authentication endpoints
   - POST /api/auth/register - User registration
   - POST /api/auth/login - User login
   - Add JWT token generation
   - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5_
 
-- [ ] 9.2 Create profile endpoints
+- [x] 9.2 Create profile endpoints
   - POST /api/profiles - Create profile
   - PUT /api/profiles/:userId - Update profile
   - GET /api/profiles/:userId - Get profile
   - Add authentication middleware
   - _Requirements: 2.1, 2.2, 2.3, 2.4_
 
-- [ ] 9.3 Create book endpoints
+- [x] 9.3 Create book endpoints
   - GET /api/books/search/openlibrary?q={query} - Search OpenLibrary
   - POST /api/books/from-openlibrary - Add book from OpenLibrary
   - GET /api/books/:bookId - Get book details
@@ -226,7 +226,7 @@
   - Add authentication middleware
   - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 7.1, 7.2, 7.3, 7.4_
 
-- [ ] 9.4 Create review endpoints
+- [x] 9.4 Create review endpoints
   - POST /api/reviews - Create review
   - PUT /api/reviews/:reviewId - Update review
   - DELETE /api/reviews/:reviewId - Delete review

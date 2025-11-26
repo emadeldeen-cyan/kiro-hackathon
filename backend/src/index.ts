@@ -2,6 +2,15 @@ import express, { Application } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { testConnection, initializeDatabase } from './utils/database';
+import { initApiRoutes } from './api';
+import { UserService, ProfileService, BookService, ReviewService } from './services';
+import { 
+  InMemoryUserRepository, 
+  InMemoryProfileRepository, 
+  InMemoryBookRepository, 
+  InMemoryReviewRepository 
+} from './repositories';
+import { OpenLibraryClient } from './clients/openlibrary';
 
 dotenv.config();
 
@@ -21,7 +30,32 @@ app.get('/health', (_req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// API routes will be added here
+// Initialize repositories
+const userRepository = new InMemoryUserRepository();
+const profileRepository = new InMemoryProfileRepository();
+const bookRepository = new InMemoryBookRepository();
+const reviewRepository = new InMemoryReviewRepository();
+
+// Initialize OpenLibrary client
+const openLibraryClient = new OpenLibraryClient();
+
+// Initialize services
+const userService = new UserService(userRepository);
+const profileService = new ProfileService(profileRepository);
+const bookService = new BookService(bookRepository, openLibraryClient, reviewRepository);
+const reviewService = new ReviewService(reviewRepository, bookRepository);
+
+// Initialize and mount API routes
+const apiRouter = initApiRoutes({
+  userService,
+  profileService,
+  bookService,
+  reviewService,
+});
+
+app.use('/api', apiRouter);
+
+// Root API endpoint
 app.get('/api', (_req, res) => {
   res.json({ message: 'Book Management API' });
 });
