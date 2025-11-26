@@ -1,5 +1,5 @@
-import { User } from '../models';
-import { IUserRepository } from '../repositories';
+import { User, Profile } from '../models';
+import { IUserRepository, IProfileRepository } from '../repositories';
 import { hashPassword, verifyPassword } from '../utils/password';
 
 // Authentication token interface
@@ -102,5 +102,97 @@ export class UserService implements IUserService {
       userId: user.id,
       username: user.username,
     };
+  }
+}
+
+// Profile Service Interface
+export interface IProfileService {
+  createProfile(userId: string, displayName: string, bio?: string, avatarUrl?: string): Promise<Profile>;
+  updateProfile(userId: string, updates: Partial<{ displayName: string; bio: string; avatarUrl: string }>): Promise<Profile>;
+  getProfile(userId: string): Promise<Profile>;
+}
+
+// Profile Service Implementation
+export class ProfileService implements IProfileService {
+  constructor(private profileRepository: IProfileRepository) {}
+
+  /**
+   * Validate display name meets requirements
+   * @param displayName - Display name to validate
+   * @returns True if display name is valid
+   */
+  private validateDisplayName(displayName: string): boolean {
+    return displayName.length <= 100;
+  }
+
+  /**
+   * Create a new profile for a user
+   * @param userId - User ID to create profile for
+   * @param displayName - Display name (max 100 characters)
+   * @param bio - Optional bio text
+   * @param avatarUrl - Optional avatar URL
+   * @returns Created profile
+   * @throws Error if validation fails or profile already exists
+   */
+  async createProfile(userId: string, displayName: string, bio?: string, avatarUrl?: string): Promise<Profile> {
+    // Validate display name length
+    if (!this.validateDisplayName(displayName)) {
+      throw new Error('Display name must not exceed 100 characters');
+    }
+
+    // Check if profile already exists for this user
+    const existingProfile = await this.profileRepository.findByUserId(userId);
+    if (existingProfile) {
+      throw new Error('Profile already exists for this user');
+    }
+
+    // Create profile
+    const profile = await this.profileRepository.create({
+      userId,
+      displayName,
+      bio,
+      avatarUrl,
+    });
+
+    return profile;
+  }
+
+  /**
+   * Update an existing profile
+   * @param userId - User ID whose profile to update
+   * @param updates - Partial profile data to update
+   * @returns Updated profile
+   * @throws Error if validation fails or profile not found
+   */
+  async updateProfile(userId: string, updates: Partial<{ displayName: string; bio: string; avatarUrl: string }>): Promise<Profile> {
+    // Validate display name if provided
+    if (updates.displayName !== undefined && !this.validateDisplayName(updates.displayName)) {
+      throw new Error('Display name must not exceed 100 characters');
+    }
+
+    // Check if profile exists
+    const existingProfile = await this.profileRepository.findByUserId(userId);
+    if (!existingProfile) {
+      throw new Error('Profile not found');
+    }
+
+    // Update profile
+    const profile = await this.profileRepository.update(userId, updates);
+
+    return profile;
+  }
+
+  /**
+   * Get a user's profile
+   * @param userId - User ID whose profile to retrieve
+   * @returns User profile
+   * @throws Error if profile not found
+   */
+  async getProfile(userId: string): Promise<Profile> {
+    const profile = await this.profileRepository.findByUserId(userId);
+    if (!profile) {
+      throw new Error('Profile not found');
+    }
+    return profile;
   }
 }
