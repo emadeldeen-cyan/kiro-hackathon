@@ -77,3 +77,26 @@ export interface OpenLibraryBook {
   authors?: Array<{ author: { key: string } }>;
   covers?: number[];
 }
+
+// Review model
+export interface Review {
+  id: string;
+  userId: string;
+  bookId: string;
+  rating: number;
+  text: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface CreateReviewDTO {
+  userId: string;
+  bookId: string;
+  rating: number;
+  text: string;
+}
+
+export interface UpdateReviewDTO {
+  rating?: number;
+  text?: string;
+}

@@ -1,5 +1,5 @@
-import { User, Profile, Book, OpenLibrarySearchResult } from '../models';
-import { IUserRepository, IProfileRepository, IBookRepository } from '../repositories';
+import { User, Profile, Book, OpenLibrarySearchResult, Review } from '../models';
+import { IUserRepository, IProfileRepository, IBookRepository, IReviewRepository } from '../repositories';
 import { IOpenLibraryClient } from '../clients/openlibrary';
 import { hashPassword, verifyPassword } from '../utils/password';
 
@@ -222,7 +222,8 @@ export interface IBookService {
 export class BookService implements IBookService {
   constructor(
     private bookRepository: IBookRepository,
-    private openLibraryClient: IOpenLibraryClient
+    private openLibraryClient: IOpenLibraryClient,
+    private reviewRepository?: IReviewRepository
   ) {}
 
   /**
@@ -321,16 +322,213 @@ export class BookService implements IBookService {
   async searchLocalBooks(query: string): Promise<BookSearchResult[]> {
     const books = await this.bookRepository.search(query);
     
-    // Map to search results (average rating will be calculated later when reviews are implemented)
-    return books.map(book => ({
-      id: book.id,
-      openLibraryKey: book.openLibraryKey,
-      title: book.title,
-      author: book.author,
-      isbn: book.isbn,
-      description: book.description,
-      coverImageUrl: book.coverImageUrl,
-      averageRating: null, // TODO: Calculate from reviews when review system is implemented
-    }));
+    // Map to search results with average ratings
+    const results: BookSearchResult[] = [];
+    for (const book of books) {
+      let averageRating: number | null = null;
+      
+      // Calculate average rating if review repository is available
+      if (this.reviewRepository) {
+        const reviews = await this.reviewRepository.findByBookId(book.id);
+        if (reviews.length > 0) {
+          const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
+          averageRating = totalRating / reviews.length;
+        }
+      }
+      
+      results.push({
+        id: book.id,
+        openLibraryKey: book.openLibraryKey,
+        title: book.title,
+        author: book.author,
+        isbn: book.isbn,
+        description: book.description,
+        coverImageUrl: book.coverImageUrl,
+        averageRating,
+      });
+    }
+    
+    return results;
+  }
+}
+
+// Review with book data for user review history
+export interface ReviewWithBook {
+  id: string;
+  userId: string;
+  bookId: string;
+  rating: number;
+  text: string;
+  createdAt: Date;
+  updatedAt: Date;
+  book: {
+    id: string;
+    title: string;
+    author: string;
+    isbn: string | null;
+  };
+}
+
+// Review Service Interface
+export interface IReviewService {
+  createReview(userId: string, bookId: string, rating: number, text: string): Promise<Review>;
+  updateReview(reviewId: string, userId: string, rating?: number, text?: string): Promise<Review>;
+  deleteReview(reviewId: string, userId: string): Promise<void>;
+  getReviewsByBook(bookId: string): Promise<Review[]>;
+  getReviewsByUser(userId: string): Promise<ReviewWithBook[]>;
+}
+
+// Review Service Implementation
+export class ReviewService implements IReviewService {
+  constructor(
+    private reviewRepository: IReviewRepository,
+    private bookRepository: IBookRepository
+  ) {}
+
+  /**
+   * Validate rating is within valid range
+   * @param rating - Rating value to validate
+   * @returns True if rating is valid
+   */
+  private validateRating(rating: number): boolean {
+    return rating >= 1 && rating <= 5;
+  }
+
+  /**
+   * Create a new review for a book
+   * @param userId - User ID creating the review
+   * @param bookId - Book ID being reviewed
+   * @param rating - Rating (1-5)
+   * @param text - Review text
+   * @returns Created review
+   * @throws Error if validation fails or user already reviewed this book
+   */
+  async createReview(userId: string, bookId: string, rating: number, text: string): Promise<Review> {
+    // Validate rating range
+    if (!this.validateRating(rating)) {
+      throw new Error('Rating must be between 1 and 5');
+    }
+
+    // Check if user already reviewed this book
+    const existingReview = await this.reviewRepository.findByUserAndBook(userId, bookId);
+    if (existingReview) {
+      throw new Error('User has already reviewed this book');
+    }
+
+    // Verify book exists
+    const book = await this.bookRepository.findById(bookId);
+    if (!book) {
+      throw new Error('Book not found');
+    }
+
+    // Create review
+    const review = await this.reviewRepository.create({
+      userId,
+      bookId,
+      rating,
+      text,
+    });
+
+    return review;
+  }
+
+  /**
+   * Update an existing review
+   * @param reviewId - Review ID to update
+   * @param userId - User ID attempting the update (for authorization)
+   * @param rating - Optional new rating (1-5)
+   * @param text - Optional new review text
+   * @returns Updated review
+   * @throws Error if validation fails, review not found, or unauthorized
+   */
+  async updateReview(reviewId: string, userId: string, rating?: number, text?: string): Promise<Review> {
+    // Find existing review
+    const existingReview = await this.reviewRepository.findById(reviewId);
+    if (!existingReview) {
+      throw new Error('Review not found');
+    }
+
+    // Check authorization - only review owner can update
+    if (existingReview.userId !== userId) {
+      throw new Error('Unauthorized: You can only update your own reviews');
+    }
+
+    // Validate rating if provided
+    if (rating !== undefined && !this.validateRating(rating)) {
+      throw new Error('Rating must be between 1 and 5');
+    }
+
+    // Update review
+    const updatedReview = await this.reviewRepository.update(reviewId, {
+      rating,
+      text,
+    });
+
+    return updatedReview;
+  }
+
+  /**
+   * Delete a review
+   * @param reviewId - Review ID to delete
+   * @param userId - User ID attempting the deletion (for authorization)
+   * @throws Error if review not found or unauthorized
+   */
+  async deleteReview(reviewId: string, userId: string): Promise<void> {
+    // Find existing review
+    const existingReview = await this.reviewRepository.findById(reviewId);
+    if (!existingReview) {
+      throw new Error('Review not found');
+    }
+
+    // Check authorization - only review owner can delete
+    if (existingReview.userId !== userId) {
+      throw new Error('Unauthorized: You can only delete your own reviews');
+    }
+
+    // Delete review
+    await this.reviewRepository.delete(reviewId);
+  }
+
+  /**
+   * Get all reviews for a specific book
+   * @param bookId - Book ID
+   * @returns Array of reviews for the book
+   */
+  async getReviewsByBook(bookId: string): Promise<Review[]> {
+    return await this.reviewRepository.findByBookId(bookId);
+  }
+
+  /**
+   * Get all reviews by a specific user with associated book data
+   * @param userId - User ID
+   * @returns Array of reviews with book information
+   */
+  async getReviewsByUser(userId: string): Promise<ReviewWithBook[]> {
+    const reviews = await this.reviewRepository.findByUserId(userId);
+    
+    // Fetch book data for each review
+    const reviewsWithBooks: ReviewWithBook[] = [];
+    for (const review of reviews) {
+      const book = await this.bookRepository.findById(review.bookId);
+      if (book) {
+        reviewsWithBooks.push({
+          id: review.id,
+          userId: review.userId,
+          bookId: review.bookId,
+          rating: review.rating,
+          text: review.text,
+          createdAt: review.createdAt,
+          updatedAt: review.updatedAt,
+          book: {
+            id: book.id,
+            title: book.title,
+            author: book.author,
+            isbn: book.isbn,
+          },
+        });
+      }
+    }
+
+    return reviewsWithBooks;
   }
 }

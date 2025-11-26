@@ -129,8 +129,8 @@
 - [x] 6. Checkpoint - Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 7. Implement Review model and management
-- [ ] 7.1 Create Review data model and repository
+- [x] 7. Implement Review model and management
+- [x] 7.1 Create Review data model and repository
   - Define Review TypeScript interface
   - Implement IReviewRepository interface
   - Create review repository with all required methods
@@ -148,7 +148,7 @@
   - **Property 14: One review per user per book**
   - **Validates: Requirements 4.5**
 
-- [ ] 7.5 Implement ReviewService
+- [x] 7.5 Implement ReviewService
   - Create ReviewService class implementing IReviewService
   - Implement createReview with rating validation and duplicate check
   - Implement updateReview with authorization check

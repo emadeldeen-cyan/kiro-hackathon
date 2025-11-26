@@ -1,4 +1,4 @@
-import { User, CreateUserDTO, Profile, CreateProfileDTO, UpdateProfileDTO, Book, CreateBookDTO } from '../models';
+import { User, CreateUserDTO, Profile, CreateProfileDTO, UpdateProfileDTO, Book, CreateBookDTO, Review, CreateReviewDTO, UpdateReviewDTO } from '../models';
 
 // User Repository Interface
 export interface IUserRepository {
@@ -205,6 +205,158 @@ export class InMemoryBookRepository implements IBookRepository {
   clear(): void {
     this.books.clear();
     this.openLibraryKeyIndex.clear();
+    this.idCounter = 1;
+  }
+}
+
+// Review Repository Interface
+export interface IReviewRepository {
+  create(reviewData: CreateReviewDTO): Promise<Review>;
+  update(reviewId: string, reviewData: UpdateReviewDTO): Promise<Review>;
+  delete(reviewId: string): Promise<void>;
+  findById(reviewId: string): Promise<Review | null>;
+  findByBookId(bookId: string): Promise<Review[]>;
+  findByUserId(userId: string): Promise<Review[]>;
+  findByUserAndBook(userId: string, bookId: string): Promise<Review | null>;
+}
+
+// In-memory Review Repository Implementation
+export class InMemoryReviewRepository implements IReviewRepository {
+  private reviews: Map<string, Review> = new Map();
+  private bookIdIndex: Map<string, Set<string>> = new Map();
+  private userIdIndex: Map<string, Set<string>> = new Map();
+  private userBookIndex: Map<string, string> = new Map();
+  private idCounter = 1;
+
+  async create(reviewData: CreateReviewDTO): Promise<Review> {
+    const id = `review_${this.idCounter++}`;
+    const now = new Date();
+    
+    const review: Review = {
+      id,
+      userId: reviewData.userId,
+      bookId: reviewData.bookId,
+      rating: reviewData.rating,
+      text: reviewData.text,
+      createdAt: now,
+      updatedAt: now,
+    };
+
+    this.reviews.set(id, review);
+
+    // Update book index
+    if (!this.bookIdIndex.has(reviewData.bookId)) {
+      this.bookIdIndex.set(reviewData.bookId, new Set());
+    }
+    this.bookIdIndex.get(reviewData.bookId)!.add(id);
+
+    // Update user index
+    if (!this.userIdIndex.has(reviewData.userId)) {
+      this.userIdIndex.set(reviewData.userId, new Set());
+    }
+    this.userIdIndex.get(reviewData.userId)!.add(id);
+
+    // Update user-book index
+    const userBookKey = `${reviewData.userId}:${reviewData.bookId}`;
+    this.userBookIndex.set(userBookKey, id);
+
+    return review;
+  }
+
+  async update(reviewId: string, reviewData: UpdateReviewDTO): Promise<Review> {
+    const existingReview = this.reviews.get(reviewId);
+    if (!existingReview) {
+      throw new Error('Review not found');
+    }
+
+    const updatedReview: Review = {
+      ...existingReview,
+      rating: reviewData.rating !== undefined ? reviewData.rating : existingReview.rating,
+      text: reviewData.text !== undefined ? reviewData.text : existingReview.text,
+      updatedAt: new Date(),
+    };
+
+    this.reviews.set(reviewId, updatedReview);
+    return updatedReview;
+  }
+
+  async delete(reviewId: string): Promise<void> {
+    const review = this.reviews.get(reviewId);
+    if (!review) {
+      throw new Error('Review not found');
+    }
+
+    // Remove from main map
+    this.reviews.delete(reviewId);
+
+    // Remove from book index
+    const bookReviews = this.bookIdIndex.get(review.bookId);
+    if (bookReviews) {
+      bookReviews.delete(reviewId);
+      if (bookReviews.size === 0) {
+        this.bookIdIndex.delete(review.bookId);
+      }
+    }
+
+    // Remove from user index
+    const userReviews = this.userIdIndex.get(review.userId);
+    if (userReviews) {
+      userReviews.delete(reviewId);
+      if (userReviews.size === 0) {
+        this.userIdIndex.delete(review.userId);
+      }
+    }
+
+    // Remove from user-book index
+    const userBookKey = `${review.userId}:${review.bookId}`;
+    this.userBookIndex.delete(userBookKey);
+  }
+
+  async findById(reviewId: string): Promise<Review | null> {
+    return this.reviews.get(reviewId) || null;
+  }
+
+  async findByBookId(bookId: string): Promise<Review[]> {
+    const reviewIds = this.bookIdIndex.get(bookId);
+    if (!reviewIds) return [];
+
+    const reviews: Review[] = [];
+    for (const reviewId of reviewIds) {
+      const review = this.reviews.get(reviewId);
+      if (review) {
+        reviews.push(review);
+      }
+    }
+    return reviews;
+  }
+
+  async findByUserId(userId: string): Promise<Review[]> {
+    const reviewIds = this.userIdIndex.get(userId);
+    if (!reviewIds) return [];
+
+    const reviews: Review[] = [];
+    for (const reviewId of reviewIds) {
+      const review = this.reviews.get(reviewId);
+      if (review) {
+        reviews.push(review);
+      }
+    }
+    return reviews;
+  }
+
+  async findByUserAndBook(userId: string, bookId: string): Promise<Review | null> {
+    const userBookKey = `${userId}:${bookId}`;
+    const reviewId = this.userBookIndex.get(userBookKey);
+    if (!reviewId) return null;
+    return this.reviews.get(reviewId) || null;
+  }
+
+  // Helper method for testing
+  clear(): void {
+    this.reviews.clear();
+    this.bookIdIndex.clear();
+    this.userIdIndex.clear();
+    this.userBookIndex.clear();
     this.idCounter = 1;
   }
 }
