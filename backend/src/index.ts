@@ -50,10 +50,10 @@ app.get('/health', (_req, res) => {
 });
 
 // Initialize repositories
-const userRepository = new InMemoryUserRepository();
+const reviewRepository = new InMemoryReviewRepository();
+const userRepository = new InMemoryUserRepository(reviewRepository);
 const profileRepository = new InMemoryProfileRepository();
 const bookRepository = new InMemoryBookRepository();
-const reviewRepository = new InMemoryReviewRepository();
 
 // Initialize OpenLibrary client
 const openLibraryClient = new OpenLibraryClient();
