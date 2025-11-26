@@ -186,8 +186,8 @@
   - Test getting reviews by user
   - _Requirements: 4.1, 4.4, 5.1, 5.2, 5.3, 5.4, 6.1, 6.2_
 
-- [ ] 8. Implement local book search
-- [ ] 8.1 Add search functionality to book repository
+- [x] 8. Implement local book search
+- [x] 8.1 Add search functionality to book repository
   - Implement case-insensitive search on title and author fields
   - Handle empty query to return all books
   - _Requirements: 7.1, 7.2, 7.3_
