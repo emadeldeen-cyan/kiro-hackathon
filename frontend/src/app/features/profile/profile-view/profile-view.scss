@@ -4,6 +4,51 @@
   padding: 0 16px;
   animation: fadeIn 250ms;
 
+  .loading {
+    text-align: center;
+    padding: 64px 16px;
+    color: rgba(0, 0, 0, 0.6);
+    font-size: 1.125rem;
+  }
+
+  .error-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+
+    .error-card {
+      max-width: 500px;
+      text-align: center;
+
+      mat-card-content {
+        padding: 48px 32px;
+
+        .error-icon {
+          font-size: 64px;
+          width: 64px;
+          height: 64px;
+          color: rgba(0, 0, 0, 0.38);
+          margin-bottom: 16px;
+        }
+
+        h2 {
+          color: rgba(0, 0, 0, 0.87);
+          margin-bottom: 24px;
+          font-weight: 400;
+        }
+
+        .create-profile-button {
+          margin-top: 16px;
+          
+          mat-icon {
+            margin-right: 8px;
+          }
+        }
+      }
+    }
+  }
+
   .profile-card {
     margin-bottom: 32px;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);

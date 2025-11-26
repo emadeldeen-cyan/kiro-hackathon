@@ -3,8 +3,22 @@
     Loading profile...
   </div>
 
-  <div *ngIf="errorMessage && !isLoading" class="error-message">
-    {{ errorMessage }}
+  <div *ngIf="errorMessage && !isLoading" class="error-container">
+    <mat-card class="error-card">
+      <mat-card-content>
+        <mat-icon class="error-icon">person_off</mat-icon>
+        <h2>{{ errorMessage }}</h2>
+        <button 
+          *ngIf="isOwnProfile" 
+          mat-raised-button 
+          color="primary" 
+          (click)="onCreateProfile()"
+          class="create-profile-button">
+          <mat-icon>add</mat-icon>
+          Create Profile
+        </button>
+      </mat-card-content>
+    </mat-card>
   </div>
 
   <div *ngIf="profile && !isLoading">

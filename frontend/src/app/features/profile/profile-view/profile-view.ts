@@ -62,10 +62,23 @@ export class ProfileView implements OnInit {
         this.isLoading = false;
       },
       error: (error) => {
-        this.errorMessage = error.error?.message || 'Failed to load profile';
+        if (error.status === 404) {
+          // Profile not found
+          if (this.isOwnProfile) {
+            this.errorMessage = 'You haven\'t created a profile yet.';
+          } else {
+            this.errorMessage = 'This user hasn\'t created a profile yet.';
+          }
+        } else {
+          this.errorMessage = error.error?.message || 'Failed to load profile';
+        }
         this.isLoading = false;
       }
     });
+  }
+
+  onCreateProfile(): void {
+    this.router.navigate(['/profile']);
   }
 
   private loadReviews(): void {
