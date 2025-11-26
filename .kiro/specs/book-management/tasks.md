@@ -126,7 +126,7 @@
   - Test local search functionality
   - _Requirements: 3.2, 3.3, 3.4_
 
-- [ ] 6. Checkpoint - Ensure all tests pass
+- [x] 6. Checkpoint - Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
 - [ ] 7. Implement Review model and management
