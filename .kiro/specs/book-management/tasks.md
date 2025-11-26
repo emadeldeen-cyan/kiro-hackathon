@@ -2,7 +2,7 @@
 
 ## Backend Tasks
 
-- [ ] 1. Set up backend project structure and dependencies
+- [x] 1. Set up backend project structure and dependencies
   - Create backend directory structure (models, repositories, services, api, utils)
   - Initialize package.json with required dependencies (express, bcrypt, jsonwebtoken, axios, etc.)
   - Set up TypeScript configuration
