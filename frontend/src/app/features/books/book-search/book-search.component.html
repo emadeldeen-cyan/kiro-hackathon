@@ -1,16 +1,29 @@
 <div class="book-search-container">
   <h1 id="page-title">Search OpenLibrary</h1>
   
-  <mat-form-field appearance="outline" class="search-field">
-    <mat-label>Search for books</mat-label>
-    <input 
-      matInput 
-      [formControl]="searchControl" 
-      placeholder="Enter book title, author, or ISBN"
-      type="search"
-      aria-label="Search for books by title, author, or ISBN"
-      aria-describedby="page-title">
-  </mat-form-field>
+  <div class="search-bar">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Search for books</mat-label>
+      <input 
+        matInput 
+        [formControl]="searchControl" 
+        placeholder="Enter book title, author, or ISBN"
+        type="search"
+        (keyup.enter)="onSearch()"
+        aria-label="Search for books by title, author, or ISBN"
+        aria-describedby="page-title">
+    </mat-form-field>
+    <button 
+      mat-raised-button 
+      color="primary" 
+      (click)="onSearch()"
+      [disabled]="isLoading"
+      class="search-button"
+      aria-label="Search for books">
+      <mat-icon>search</mat-icon>
+      Search
+    </button>
+  </div>
 
   <div *ngIf="errorMessage" class="error-message" role="alert" aria-live="polite">
     {{ errorMessage }}
@@ -51,7 +64,4 @@
     </div>
   </div>
 
-  <div *ngIf="!isLoading && searchControl.value && searchResults.length === 0 && !errorMessage" class="no-results" role="status" aria-live="polite">
-    <p>No books found. Try a different search term.</p>
-  </div>
 </div>

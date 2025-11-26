@@ -10,10 +10,29 @@
     font-weight: 500;
   }
 
-  .search-field {
-    width: 100%;
-    max-width: 600px;
+  .search-bar {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
     margin-bottom: 32px;
+    max-width: 800px;
+
+    .search-field {
+      flex: 1;
+      margin: 0;
+    }
+
+    .search-button {
+      height: 56px;
+      min-width: 120px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      
+      mat-icon {
+        margin: 0;
+      }
+    }
   }
 
   .error-message {
@@ -126,6 +145,22 @@
   }
   to {
     opacity: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .book-search-container {
+    .search-bar {
+      flex-direction: column;
+      
+      .search-field {
+        width: 100%;
+      }
+      
+      .search-button {
+        width: 100%;
+      }
+    }
   }
 }
 

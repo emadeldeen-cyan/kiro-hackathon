@@ -33,10 +33,7 @@ router.get('/search/openlibrary', authenticate, async (req: AuthRequest, res: Re
     // Search OpenLibrary
     const results = await bookService.searchOpenLibrary(query);
 
-    res.status(200).json({
-      results,
-      count: results.length,
-    });
+    res.status(200).json(results);
   } catch (error) {
     // Handle OpenLibrary API errors
     console.error('OpenLibrary search error:', error);
@@ -69,10 +66,7 @@ router.post('/from-openlibrary', authenticate, async (req: AuthRequest, res: Res
     // Add book from OpenLibrary
     const book = await bookService.addBookFromOpenLibrary(openLibraryKey);
 
-    res.status(201).json({
-      message: 'Book added successfully',
-      book,
-    });
+    res.status(201).json(book);
   } catch (error) {
     if (error instanceof Error) {
       // Handle OpenLibrary API errors
@@ -97,6 +91,30 @@ router.post('/from-openlibrary', authenticate, async (req: AuthRequest, res: Res
 });
 
 /**
+ * GET /api/books/search?q={query}
+ * Search for books in the local database
+ * NOTE: This route must come before /:bookId to avoid route conflicts
+ */
+router.get('/search', authenticate, async (req: AuthRequest, res: Response): Promise<void> => {
+  try {
+    const query = (req.query.q as string) || '';
+
+    // Search local books
+    const results = await bookService.searchLocalBooks(query);
+
+    res.status(200).json(results);
+  } catch (error) {
+    // Handle unexpected errors
+    console.error('Local book search error:', error);
+    res.status(500).json({
+      error: 'Internal Server Error',
+      message: 'An unexpected error occurred while searching books',
+      statusCode: 500,
+    });
+  }
+});
+
+/**
  * GET /api/books/:bookId
  * Get book details by ID
  */
@@ -107,9 +125,7 @@ router.get('/:bookId', authenticate, async (req: AuthRequest, res: Response): Pr
     // Get book
     const book = await bookService.getBook(bookId);
 
-    res.status(200).json({
-      book,
-    });
+    res.status(200).json(book);
   } catch (error) {
     if (error instanceof Error) {
       // Handle not found errors
@@ -128,32 +144,6 @@ router.get('/:bookId', authenticate, async (req: AuthRequest, res: Response): Pr
     res.status(500).json({
       error: 'Internal Server Error',
       message: 'An unexpected error occurred while retrieving book',
-      statusCode: 500,
-    });
-  }
-});
-
-/**
- * GET /api/books/search?q={query}
- * Search for books in the local database
- */
-router.get('/search', authenticate, async (req: AuthRequest, res: Response): Promise<void> => {
-  try {
-    const query = (req.query.q as string) || '';
-
-    // Search local books
-    const results = await bookService.searchLocalBooks(query);
-
-    res.status(200).json({
-      results,
-      count: results.length,
-    });
-  } catch (error) {
-    // Handle unexpected errors
-    console.error('Local book search error:', error);
-    res.status(500).json({
-      error: 'Internal Server Error',
-      message: 'An unexpected error occurred while searching books',
       statusCode: 500,
     });
   }

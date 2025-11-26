@@ -34,10 +34,7 @@ router.post('/', authenticate, async (req: AuthRequest, res: Response): Promise<
     // Create profile
     const profile = await profileService.createProfile(userId, displayName, bio, avatarUrl);
 
-    res.status(201).json({
-      message: 'Profile created successfully',
-      profile,
-    });
+    res.status(201).json(profile);
   } catch (error) {
     if (error instanceof Error) {
       // Handle validation errors
@@ -88,10 +85,7 @@ router.put('/:userId', authenticate, async (req: AuthRequest, res: Response): Pr
       avatarUrl,
     });
 
-    res.status(200).json({
-      message: 'Profile updated successfully',
-      profile,
-    });
+    res.status(200).json(profile);
   } catch (error) {
     if (error instanceof Error) {
       // Handle not found errors
@@ -136,9 +130,7 @@ router.get('/:userId', authenticate, async (req: AuthRequest, res: Response): Pr
     // Get profile
     const profile = await profileService.getProfile(userId);
 
-    res.status(200).json({
-      profile,
-    });
+    res.status(200).json(profile);
   } catch (error) {
     if (error instanceof Error) {
       // Handle not found errors

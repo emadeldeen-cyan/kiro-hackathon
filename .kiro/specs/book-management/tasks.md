@@ -458,7 +458,7 @@
   - Ensure proper heading hierarchy
   - _Requirements: All_
 
-- [ ] 20. Final Frontend Checkpoint - Test end-to-end flows
+- [x] 20. Final Frontend Checkpoint - Test end-to-end flows
   - Test complete user registration and login flow
   - Test searching OpenLibrary and adding books
   - Test creating, editing, and deleting reviews

@@ -34,10 +34,7 @@ router.post('/', authenticate, async (req: AuthRequest, res: Response): Promise<
     // Create review
     const review = await reviewService.createReview(userId, bookId, rating, text);
 
-    res.status(201).json({
-      message: 'Review created successfully',
-      review,
-    });
+    res.status(201).json(review);
   } catch (error) {
     if (error instanceof Error) {
       // Handle validation errors
@@ -84,10 +81,7 @@ router.put('/:reviewId', authenticate, async (req: AuthRequest, res: Response): 
     // Update review (authorization check is done in service)
     const review = await reviewService.updateReview(reviewId, userId, rating, text);
 
-    res.status(200).json({
-      message: 'Review updated successfully',
-      review,
-    });
+    res.status(200).json(review);
   } catch (error) {
     if (error instanceof Error) {
       // Handle not found errors
@@ -190,10 +184,7 @@ router.get('/books/:bookId', authenticate, async (req: AuthRequest, res: Respons
     // Get reviews for book
     const reviews = await reviewService.getReviewsByBook(bookId);
 
-    res.status(200).json({
-      reviews,
-      count: reviews.length,
-    });
+    res.status(200).json(reviews);
   } catch (error) {
     // Handle unexpected errors
     console.error('Review retrieval error:', error);
@@ -216,10 +207,7 @@ router.get('/users/:userId', authenticate, async (req: AuthRequest, res: Respons
     // Get reviews by user
     const reviews = await reviewService.getReviewsByUser(userId);
 
-    res.status(200).json({
-      reviews,
-      count: reviews.length,
-    });
+    res.status(200).json(reviews);
   } catch (error) {
     // Handle unexpected errors
     console.error('Review retrieval error:', error);

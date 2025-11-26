@@ -58,7 +58,7 @@ export class ReviewService {
     if (this.demoService.isDemoMode()) {
       return this.demoService.getDemoReviewsForBook(bookId);
     }
-    return this.apiService.get<Review[]>(`/books/${bookId}/reviews`);
+    return this.apiService.get<Review[]>(`/reviews/books/${bookId}`);
   }
 
   /**
@@ -68,6 +68,6 @@ export class ReviewService {
     if (this.demoService.isDemoMode()) {
       return this.demoService.getDemoReviewsByUserWithBooks(userId);
     }
-    return this.apiService.get<ReviewWithBook[]>(`/users/${userId}/reviews`);
+    return this.apiService.get<ReviewWithBook[]>(`/reviews/users/${userId}`);
   }
 }

@@ -2,12 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { debounceTime, distinctUntilChanged, switchMap, catchError, of, finalize } from 'rxjs';
+import { catchError, of, finalize } from 'rxjs';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatIconModule } from '@angular/material/icon';
 import { BookService } from '../../../core/services/book.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { OpenLibrarySearchResult } from '../../../core/models/book.models';
@@ -22,7 +23,8 @@ import { OpenLibrarySearchResult } from '../../../core/models/book.models';
     MatInputModule,
     MatButtonModule,
     MatCardModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatIconModule
   ],
   templateUrl: './book-search.component.html',
   styleUrls: ['./book-search.component.scss']
@@ -41,27 +43,39 @@ export class BookSearchComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Implement debounced search
-    this.searchControl.valueChanges.pipe(
-      debounceTime(300),
-      distinctUntilChanged(),
-      switchMap(query => {
-        if (!query || query.trim().length === 0) {
-          return of([]);
-        }
-        this.isLoading = true;
-        this.errorMessage = '';
-        return this.bookService.searchOpenLibrary(query.trim()).pipe(
-          catchError(error => {
-            this.errorMessage = 'Failed to search OpenLibrary. Please try again.';
-            console.error('OpenLibrary search error:', error);
-            return of([]);
-          })
-        );
+    // No automatic search on init
+  }
+
+  /**
+   * Perform search when user clicks search button
+   */
+  onSearch(): void {
+    const query = this.searchControl.value;
+    
+    if (!query || query.trim().length === 0) {
+      this.searchResults = [];
+      this.errorMessage = 'Please enter a search term';
+      return;
+    }
+
+    this.isLoading = true;
+    this.errorMessage = '';
+    this.searchResults = [];
+
+    this.bookService.searchOpenLibrary(query.trim()).pipe(
+      catchError(error => {
+        this.errorMessage = 'Failed to search OpenLibrary. Please try again.';
+        console.error('OpenLibrary search error:', error);
+        return of([]);
+      }),
+      finalize(() => {
+        this.isLoading = false;
       })
     ).subscribe(results => {
       this.searchResults = results;
-      this.isLoading = false;
+      if (results.length === 0 && !this.errorMessage) {
+        this.errorMessage = 'No books found. Try a different search term.';
+      }
     });
   }
 

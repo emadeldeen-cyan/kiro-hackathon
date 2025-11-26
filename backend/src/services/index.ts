@@ -14,6 +14,7 @@ export interface AuthToken {
 export interface IUserService {
   registerUser(username: string, email: string, password: string): Promise<User>;
   authenticateUser(username: string, password: string): Promise<AuthToken>;
+  getUserById(userId: string): Promise<User | null>;
   validatePassword(password: string): boolean;
 }
 
@@ -103,6 +104,15 @@ export class UserService implements IUserService {
       userId: user.id,
       username: user.username,
     };
+  }
+
+  /**
+   * Get a user by ID
+   * @param userId - User ID
+   * @returns User or null if not found
+   */
+  async getUserById(userId: string): Promise<User | null> {
+    return await this.userRepository.findById(userId);
   }
 }
 

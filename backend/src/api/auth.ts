@@ -44,14 +44,12 @@ router.post('/register', async (req: Request, res: Response): Promise<void> => {
 
     // Return user data (without password hash) and token
     res.status(201).json({
-      message: 'User registered successfully',
+      token,
       user: {
         id: user.id,
         username: user.username,
         email: user.email,
-        createdAt: user.createdAt,
       },
-      token,
     });
   } catch (error) {
     if (error instanceof Error) {
@@ -97,18 +95,26 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
     // Authenticate user
     const authResult = await userService.authenticateUser(username, password);
 
+    // Get full user details to include email
+    const user = await userService.getUserById(authResult.userId);
+    if (!user) {
+      throw new Error('User not found after authentication');
+    }
+
     // Generate JWT token
     const token = jwt.sign(
-      { userId: authResult.userId, username: authResult.username },
+      { userId: user.id, username: user.username },
       JWT_SECRET
     );
 
-    // Return authentication result
+    // Return authentication result with user object
     res.status(200).json({
-      message: 'Login successful',
-      userId: authResult.userId,
-      username: authResult.username,
       token,
+      user: {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+      },
     });
   } catch (error) {
     if (error instanceof Error) {
