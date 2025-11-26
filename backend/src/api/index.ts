@@ -3,6 +3,7 @@ import { initAuthRoutes } from './auth';
 import { initProfileRoutes } from './profiles';
 import { initBookRoutes } from './books';
 import { initReviewRoutes } from './reviews';
+import { initUserRoutes } from './users';
 import { IUserService, IProfileService, IBookService, IReviewService } from '../services';
 
 export interface ApiServices {
@@ -23,6 +24,7 @@ export function initApiRoutes(services: ApiServices): Router {
   router.use('/profiles', initProfileRoutes(services.profileService));
   router.use('/books', initBookRoutes(services.bookService));
   router.use('/reviews', initReviewRoutes(services.reviewService));
+  router.use('/users', initUserRoutes(services.userService));
 
   return router;
 }

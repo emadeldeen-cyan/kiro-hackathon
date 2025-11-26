@@ -343,6 +343,43 @@ Authorization: Bearer <token>
 
 ---
 
+## User Endpoints
+
+### Find Users with Shared Books
+**GET** `/users/shared-books`
+
+Find users who have reviewed the same books as the authenticated user. Results are sorted by the number of shared books (descending), then alphabetically by username.
+
+**Headers:**
+```
+Authorization: Bearer <token>
+```
+
+**Response (200):**
+```json
+[
+  {
+    "id": "string",
+    "username": "string",
+    "email": "string",
+    "sharedBookCount": "number"
+  }
+]
+```
+
+**Error Responses:**
+- `401` - Unauthorized
+- `404` - User not found
+- `500` - Internal Server Error
+
+**Example:**
+```bash
+curl -X GET http://localhost:3000/api/users/shared-books \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+---
+
 ## Review Endpoints
 
 ### Create Review

@@ -6,6 +6,7 @@ export interface IUserRepository {
   findByUsername(username: string): Promise<User | null>;
   findByEmail(email: string): Promise<User | null>;
   findById(id: string): Promise<User | null>;
+  findUsersWithSharedBooks(userId: string): Promise<Array<{ user: User; sharedBookCount: number }>>;
 }
 
 // In-memory User Repository Implementation
@@ -14,6 +15,8 @@ export class InMemoryUserRepository implements IUserRepository {
   private usernameIndex: Map<string, string> = new Map();
   private emailIndex: Map<string, string> = new Map();
   private idCounter = 1;
+
+  constructor(private reviewRepository?: IReviewRepository) {}
 
   async create(userData: CreateUserDTO): Promise<User> {
     const id = `user_${this.idCounter++}`;
@@ -49,6 +52,57 @@ export class InMemoryUserRepository implements IUserRepository {
 
   async findById(id: string): Promise<User | null> {
     return this.users.get(id) || null;
+  }
+
+  async findUsersWithSharedBooks(userId: string): Promise<Array<{ user: User; sharedBookCount: number }>> {
+    if (!this.reviewRepository) {
+      return [];
+    }
+
+    // Get all books reviewed by the current user
+    const userReviews = await this.reviewRepository.findByUserId(userId);
+    const userBookIds = new Set(userReviews.map(review => review.bookId));
+
+    if (userBookIds.size === 0) {
+      return [];
+    }
+
+    // Map to track shared book counts per user
+    const sharedBooksMap = new Map<string, number>();
+
+    // For each book the user has reviewed, find other users who reviewed it
+    for (const bookId of userBookIds) {
+      const bookReviews = await this.reviewRepository.findByBookId(bookId);
+      
+      for (const review of bookReviews) {
+        // Skip the current user
+        if (review.userId === userId) continue;
+        
+        // Increment shared book count for this user
+        const currentCount = sharedBooksMap.get(review.userId) || 0;
+        sharedBooksMap.set(review.userId, currentCount + 1);
+      }
+    }
+
+    // Build result array with user objects and shared book counts
+    const results: Array<{ user: User; sharedBookCount: number }> = [];
+    
+    for (const [otherUserId, sharedBookCount] of sharedBooksMap.entries()) {
+      const user = await this.findById(otherUserId);
+      if (user) {
+        results.push({ user, sharedBookCount });
+      }
+    }
+
+    // Sort by shared book count (descending), then by username (ascending)
+    results.sort((a, b) => {
+      if (b.sharedBookCount !== a.sharedBookCount) {
+        return b.sharedBookCount - a.sharedBookCount;
+      }
+      return a.user.username.localeCompare(b.user.username);
+    });
+
+    return results;
   }
 
   // Helper method for testing

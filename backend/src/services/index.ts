@@ -10,12 +10,21 @@ export interface AuthToken {
   username: string;
 }
 
+// User with shared books information
+export interface UserWithSharedBooks {
+  id: string;
+  username: string;
+  email: string;
+  sharedBookCount: number;
+}
+
 // User Service Interface
 export interface IUserService {
   registerUser(username: string, email: string, password: string): Promise<User>;
   authenticateUser(username: string, password: string): Promise<AuthToken>;
   getUserById(userId: string): Promise<User | null>;
   validatePassword(password: string): boolean;
+  findUsersWithSameBooks(userId: string): Promise<UserWithSharedBooks[]>;
 }
 
 // User Service Implementation
@@ -113,6 +122,32 @@ export class UserService implements IUserService {
    */
   async getUserById(userId: string): Promise<User | null> {
     return await this.userRepository.findById(userId);
+  }
+
+  /**
+   * Find users who have reviewed the same books as the given user
+   * Results are sorted by number of shared books (descending), then alphabetically by username
+   * @param userId - User ID to find matches for
+   * @returns Array of users with shared book counts
+   * @throws Error if user not found
+   */
+  async findUsersWithSameBooks(userId: string): Promise<UserWithSharedBooks[]> {
+    // Verify user exists
+    const user = await this.userRepository.findById(userId);
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    // Get users with shared books
+    const usersWithSharedBooks = await this.userRepository.findUsersWithSharedBooks(userId);
+
+    // Map to response format (excluding password hash)
+    return usersWithSharedBooks.map(({ user, sharedBookCount }) => ({
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      sharedBookCount,
+    }));
   }
 }
 
