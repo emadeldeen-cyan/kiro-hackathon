@@ -10,8 +10,8 @@
   - Set up database connection (PostgreSQL or MongoDB)
   - _Requirements: All_
 
-- [ ] 2. Implement User model and authentication
-- [ ] 2.1 Create User data model and repository interface
+- [x] 2. Implement User model and authentication
+- [x] 2.1 Create User data model and repository interface
   - Define User TypeScript interface
   - Implement IUserRepository interface
   - Create in-memory or database-backed user repository
@@ -29,7 +29,7 @@
   - **Property 3: Password length validation**
   - **Validates: Requirements 1.4**
 
-- [ ] 2.5 Implement password hashing with bcrypt
+- [x] 2.5 Implement password hashing with bcrypt
   - Add bcrypt password hashing to user creation
   - Implement password verification function
   - _Requirements: 1.5_
@@ -38,7 +38,7 @@
   - **Property 4: Password hashing**
   - **Validates: Requirements 1.5**
 
-- [ ] 2.7 Implement UserService with registration logic
+- [x] 2.7 Implement UserService with registration logic
   - Create UserService class implementing IUserService
   - Implement registerUser method with all validations
   - Implement authenticateUser method
