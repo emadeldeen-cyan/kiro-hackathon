@@ -38,6 +38,28 @@ export interface UpdateProfileDTO {
   avatarUrl?: string;
 }
 
+// Book model
+export interface Book {
+  id: string;
+  openLibraryKey: string;
+  title: string;
+  author: string;
+  isbn: string | null;
+  description: string | null;
+  coverImageUrl: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface CreateBookDTO {
+  openLibraryKey: string;
+  title: string;
+  author: string;
+  isbn?: string;
+  description?: string;
+  coverImageUrl?: string;
+}
+
 // OpenLibrary data types
 export interface OpenLibrarySearchResult {
   key: string; // e.g., "/works/OL45804W"

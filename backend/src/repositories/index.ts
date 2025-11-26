@@ -1,4 +1,4 @@
-import { User, CreateUserDTO, Profile, CreateProfileDTO, UpdateProfileDTO } from '../models';
+import { User, CreateUserDTO, Profile, CreateProfileDTO, UpdateProfileDTO, Book, CreateBookDTO } from '../models';
 
 // User Repository Interface
 export interface IUserRepository {
@@ -126,6 +126,85 @@ export class InMemoryProfileRepository implements IProfileRepository {
   clear(): void {
     this.profiles.clear();
     this.userIdIndex.clear();
+    this.idCounter = 1;
+  }
+}
+
+// Book Repository Interface
+export interface IBookRepository {
+  create(bookData: CreateBookDTO): Promise<Book>;
+  findByOpenLibraryKey(openLibraryKey: string): Promise<Book | null>;
+  findById(id: string): Promise<Book | null>;
+  search(query: string): Promise<Book[]>;
+  findAll(): Promise<Book[]>;
+}
+
+// In-memory Book Repository Implementation
+export class InMemoryBookRepository implements IBookRepository {
+  private books: Map<string, Book> = new Map();
+  private openLibraryKeyIndex: Map<string, string> = new Map();
+  private idCounter = 1;
+
+  async create(bookData: CreateBookDTO): Promise<Book> {
+    const id = `book_${this.idCounter++}`;
+    const now = new Date();
+    
+    const book: Book = {
+      id,
+      openLibraryKey: bookData.openLibraryKey,
+      title: bookData.title,
+      author: bookData.author,
+      isbn: bookData.isbn || null,
+      description: bookData.description || null,
+      coverImageUrl: bookData.coverImageUrl || null,
+      createdAt: now,
+      updatedAt: now,
+    };
+
+    this.books.set(id, book);
+    this.openLibraryKeyIndex.set(bookData.openLibraryKey, id);
+
+    return book;
+  }
+
+  async findByOpenLibraryKey(openLibraryKey: string): Promise<Book | null> {
+    const bookId = this.openLibraryKeyIndex.get(openLibraryKey);
+    if (!bookId) return null;
+    return this.books.get(bookId) || null;
+  }
+
+  async findById(id: string): Promise<Book | null> {
+    return this.books.get(id) || null;
+  }
+
+  async search(query: string): Promise<Book[]> {
+    if (!query || query.trim() === '') {
+      return this.findAll();
+    }
+
+    const lowerQuery = query.toLowerCase();
+    const results: Book[] = [];
+
+    for (const book of this.books.values()) {
+      const titleMatch = book.title.toLowerCase().includes(lowerQuery);
+      const authorMatch = book.author.toLowerCase().includes(lowerQuery);
+      
+      if (titleMatch || authorMatch) {
+        results.push(book);
+      }
+    }
+
+    return results;
+  }
+
+  async findAll(): Promise<Book[]> {
+    return Array.from(this.books.values());
+  }
+
+  // Helper method for testing
+  clear(): void {
+    this.books.clear();
+    this.openLibraryKeyIndex.clear();
     this.idCounter = 1;
   }
 }

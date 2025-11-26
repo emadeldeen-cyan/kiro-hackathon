@@ -1,5 +1,6 @@
-import { User, Profile } from '../models';
-import { IUserRepository, IProfileRepository } from '../repositories';
+import { User, Profile, Book, OpenLibrarySearchResult } from '../models';
+import { IUserRepository, IProfileRepository, IBookRepository } from '../repositories';
+import { IOpenLibraryClient } from '../clients/openlibrary';
 import { hashPassword, verifyPassword } from '../utils/password';
 
 // Authentication token interface
@@ -194,5 +195,142 @@ export class ProfileService implements IProfileService {
       throw new Error('Profile not found');
     }
     return profile;
+  }
+}
+
+// Book search result with average rating
+export interface BookSearchResult {
+  id: string;
+  openLibraryKey: string;
+  title: string;
+  author: string;
+  isbn: string | null;
+  description: string | null;
+  coverImageUrl: string | null;
+  averageRating: number | null;
+}
+
+// Book Service Interface
+export interface IBookService {
+  searchOpenLibrary(query: string): Promise<OpenLibrarySearchResult[]>;
+  addBookFromOpenLibrary(openLibraryKey: string): Promise<Book>;
+  getBook(bookId: string): Promise<Book>;
+  searchLocalBooks(query: string): Promise<BookSearchResult[]>;
+}
+
+// Book Service Implementation
+export class BookService implements IBookService {
+  constructor(
+    private bookRepository: IBookRepository,
+    private openLibraryClient: IOpenLibraryClient
+  ) {}
+
+  /**
+   * Search for books using OpenLibrary API
+   * @param query - Search query string
+   * @returns Array of OpenLibrary search results
+   * @throws Error if OpenLibrary API fails
+   */
+  async searchOpenLibrary(query: string): Promise<OpenLibrarySearchResult[]> {
+    return await this.openLibraryClient.searchBooks(query);
+  }
+
+  /**
+   * Add a book from OpenLibrary to the local database
+   * Checks if book already exists by OpenLibrary Key first
+   * @param openLibraryKey - OpenLibrary key (e.g., "/works/OL45804W")
+   * @returns Existing or newly created book
+   * @throws Error if OpenLibrary API fails or book data is invalid
+   */
+  async addBookFromOpenLibrary(openLibraryKey: string): Promise<Book> {
+    // Check if book already exists in local database
+    const existingBook = await this.bookRepository.findByOpenLibraryKey(openLibraryKey);
+    if (existingBook) {
+      return existingBook;
+    }
+
+    // Fetch detailed book information from OpenLibrary
+    const bookDetails = await this.openLibraryClient.getBookDetails(openLibraryKey);
+
+    // Try to get author and ISBN from search results
+    let author = 'Unknown Author';
+    let isbn: string | undefined;
+    
+    try {
+      // Search using the book title to get additional metadata
+      const searchResults = await this.openLibraryClient.searchBooks(bookDetails.title);
+      const matchingResult = searchResults.find(result => result.key === openLibraryKey);
+      if (matchingResult) {
+        author = matchingResult.author_name?.[0] || 'Unknown Author';
+        isbn = matchingResult.isbn?.[0];
+      }
+    } catch (error) {
+      // If search fails, continue with default author
+      console.warn('Failed to fetch author from search, using default');
+    }
+
+    // Extract description (handle both string and object formats)
+    let description: string | undefined;
+    if (bookDetails.description) {
+      if (typeof bookDetails.description === 'string') {
+        description = bookDetails.description;
+      } else if (typeof bookDetails.description === 'object' && 'value' in bookDetails.description) {
+        description = bookDetails.description.value;
+      }
+    }
+
+    // Build cover image URL if cover ID is available
+    let coverImageUrl: string | undefined;
+    if (bookDetails.covers && bookDetails.covers.length > 0) {
+      const coverId = bookDetails.covers[0];
+      coverImageUrl = `https://covers.openlibrary.org/b/id/${coverId}-L.jpg`;
+    }
+
+    // Create book in local database
+    const book = await this.bookRepository.create({
+      openLibraryKey: bookDetails.key,
+      title: bookDetails.title,
+      author,
+      isbn,
+      description,
+      coverImageUrl,
+    });
+
+    return book;
+  }
+
+  /**
+   * Get a book by ID
+   * @param bookId - Book ID
+   * @returns Book
+   * @throws Error if book not found
+   */
+  async getBook(bookId: string): Promise<Book> {
+    const book = await this.bookRepository.findById(bookId);
+    if (!book) {
+      throw new Error('Book not found');
+    }
+    return book;
+  }
+
+  /**
+   * Search for books in the local database
+   * @param query - Search query (searches title and author)
+   * @returns Array of books with average ratings
+   */
+  async searchLocalBooks(query: string): Promise<BookSearchResult[]> {
+    const books = await this.bookRepository.search(query);
+    
+    // Map to search results (average rating will be calculated later when reviews are implemented)
+    return books.map(book => ({
+      id: book.id,
+      openLibraryKey: book.openLibraryKey,
+      title: book.title,
+      author: book.author,
+      isbn: book.isbn,
+      description: book.description,
+      coverImageUrl: book.coverImageUrl,
+      averageRating: null, // TODO: Calculate from reviews when review system is implemented
+    }));
   }
 }

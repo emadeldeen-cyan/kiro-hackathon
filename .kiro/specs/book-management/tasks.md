@@ -92,8 +92,8 @@
   - **Property 11: OpenLibrary search integration**
   - **Validates: Requirements 3.1**
 
-- [ ] 5. Implement Book model and management
-- [ ] 5.1 Create Book data model and repository
+- [-] 5. Implement Book model and management
+- [x] 5.1 Create Book data model and repository
   - Define Book TypeScript interface
   - Define OpenLibrary data type interfaces
   - Implement IBookRepository interface
@@ -112,7 +112,7 @@
   - **Property 10: OpenLibrary data persistence**
   - **Validates: Requirements 3.5**
 
-- [ ] 5.5 Implement BookService
+- [x] 5.5 Implement BookService
   - Create BookService class implementing IBookService
   - Implement searchOpenLibrary method
   - Implement addBookFromOpenLibrary method (check local DB first, then create if needed)
