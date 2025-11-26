@@ -2,7 +2,7 @@
 
 ## Backend Tasks
 
-- [ ] 1. Set up backend project structure and dependencies
+- [x] 1. Set up backend project structure and dependencies
   - Create backend directory structure (models, repositories, services, api, utils)
   - Initialize package.json with required dependencies (express, bcrypt, jsonwebtoken, axios, etc.)
   - Set up TypeScript configuration
@@ -10,8 +10,8 @@
   - Set up database connection (PostgreSQL or MongoDB)
   - _Requirements: All_
 
-- [ ] 2. Implement User model and authentication
-- [ ] 2.1 Create User data model and repository interface
+- [x] 2. Implement User model and authentication
+- [x] 2.1 Create User data model and repository interface
   - Define User TypeScript interface
   - Implement IUserRepository interface
   - Create in-memory or database-backed user repository
@@ -29,7 +29,7 @@
   - **Property 3: Password length validation**
   - **Validates: Requirements 1.4**
 
-- [ ] 2.5 Implement password hashing with bcrypt
+- [x] 2.5 Implement password hashing with bcrypt
   - Add bcrypt password hashing to user creation
   - Implement password verification function
   - _Requirements: 1.5_
@@ -38,7 +38,7 @@
   - **Property 4: Password hashing**
   - **Validates: Requirements 1.5**
 
-- [ ] 2.7 Implement UserService with registration logic
+- [x] 2.7 Implement UserService with registration logic
   - Create UserService class implementing IUserService
   - Implement registerUser method with all validations
   - Implement authenticateUser method
@@ -49,8 +49,8 @@
   - Test various validation failures
   - _Requirements: 1.1, 1.2, 1.3, 1.4_
 
-- [ ] 3. Implement Profile model and management
-- [ ] 3.1 Create Profile data model and repository
+- [-] 3. Implement Profile model and management
+- [x] 3.1 Create Profile data model and repository
   - Define Profile TypeScript interface
   - Implement IProfileRepository interface
   - Create profile repository implementation
@@ -68,14 +68,14 @@
   - **Property 7: Display name length validation**
   - **Validates: Requirements 2.4**
 
-- [ ] 3.5 Implement ProfileService
+- [x] 3.5 Implement ProfileService
   - Create ProfileService class implementing IProfileService
   - Implement createProfile, updateProfile, and getProfile methods
   - Add display name length validation
   - _Requirements: 2.1, 2.2, 2.3, 2.4_
 
-- [ ] 4. Implement OpenLibrary API client
-- [ ] 4.1 Create OpenLibrary client interface and implementation
+- [x] 4. Implement OpenLibrary API client
+- [x] 4.1 Create OpenLibrary client interface and implementation
   - Define IOpenLibraryClient interface
   - Implement searchBooks method using OpenLibrary search API
   - Implement getBookDetails method using OpenLibrary works API
@@ -92,8 +92,8 @@
   - **Property 11: OpenLibrary search integration**
   - **Validates: Requirements 3.1**
 
-- [ ] 5. Implement Book model and management
-- [ ] 5.1 Create Book data model and repository
+- [-] 5. Implement Book model and management
+- [x] 5.1 Create Book data model and repository
   - Define Book TypeScript interface
   - Define OpenLibrary data type interfaces
   - Implement IBookRepository interface
@@ -112,7 +112,7 @@
   - **Property 10: OpenLibrary data persistence**
   - **Validates: Requirements 3.5**
 
-- [ ] 5.5 Implement BookService
+- [x] 5.5 Implement BookService
   - Create BookService class implementing IBookService
   - Implement searchOpenLibrary method
   - Implement addBookFromOpenLibrary method (check local DB first, then create if needed)
@@ -126,11 +126,11 @@
   - Test local search functionality
   - _Requirements: 3.2, 3.3, 3.4_
 
-- [ ] 6. Checkpoint - Ensure all tests pass
+- [x] 6. Checkpoint - Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 7. Implement Review model and management
-- [ ] 7.1 Create Review data model and repository
+- [x] 7. Implement Review model and management
+- [x] 7.1 Create Review data model and repository
   - Define Review TypeScript interface
   - Implement IReviewRepository interface
   - Create review repository with all required methods
@@ -148,7 +148,7 @@
   - **Property 14: One review per user per book**
   - **Validates: Requirements 4.5**
 
-- [ ] 7.5 Implement ReviewService
+- [x] 7.5 Implement ReviewService
   - Create ReviewService class implementing IReviewService
   - Implement createReview with rating validation and duplicate check
   - Implement updateReview with authorization check
@@ -186,8 +186,8 @@
   - Test getting reviews by user
   - _Requirements: 4.1, 4.4, 5.1, 5.2, 5.3, 5.4, 6.1, 6.2_
 
-- [ ] 8. Implement local book search
-- [ ] 8.1 Add search functionality to book repository
+- [x] 8. Implement local book search
+- [x] 8.1 Add search functionality to book repository
   - Implement case-insensitive search on title and author fields
   - Handle empty query to return all books
   - _Requirements: 7.1, 7.2, 7.3_
@@ -204,21 +204,21 @@
   - **Property 22: Local search results completeness**
   - **Validates: Requirements 7.4**
 
-- [ ] 9. Implement REST API endpoints
-- [ ] 9.1 Create authentication endpoints
+- [x] 9. Implement REST API endpoints
+- [x] 9.1 Create authentication endpoints
   - POST /api/auth/register - User registration
   - POST /api/auth/login - User login
   - Add JWT token generation
   - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5_
 
-- [ ] 9.2 Create profile endpoints
+- [x] 9.2 Create profile endpoints
   - POST /api/profiles - Create profile
   - PUT /api/profiles/:userId - Update profile
   - GET /api/profiles/:userId - Get profile
   - Add authentication middleware
   - _Requirements: 2.1, 2.2, 2.3, 2.4_
 
-- [ ] 9.3 Create book endpoints
+- [x] 9.3 Create book endpoints
   - GET /api/books/search/openlibrary?q={query} - Search OpenLibrary
   - POST /api/books/from-openlibrary - Add book from OpenLibrary
   - GET /api/books/:bookId - Get book details
@@ -226,7 +226,7 @@
   - Add authentication middleware
   - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 7.1, 7.2, 7.3, 7.4_
 
-- [ ] 9.4 Create review endpoints
+- [x] 9.4 Create review endpoints
   - POST /api/reviews - Create review
   - PUT /api/reviews/:reviewId - Update review
   - DELETE /api/reviews/:reviewId - Delete review
@@ -243,13 +243,13 @@
   - Test authorization enforcement
   - _Requirements: All_
 
-- [ ] 10. Add CORS and prepare backend for frontend integration
+- [x] 10. Add CORS and prepare backend for frontend integration
   - Configure CORS middleware to allow frontend requests
   - Add environment variables for frontend URL
   - Document API endpoints and request/response formats
   - _Requirements: All_
 
-- [ ] 11. Final Backend Checkpoint - Ensure all tests pass
+- [x] 11. Final Backend Checkpoint - Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
 ## Frontend Tasks
