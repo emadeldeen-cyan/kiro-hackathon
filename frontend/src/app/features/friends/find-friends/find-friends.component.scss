@@ -1,0 +1,208 @@
+.find-friends-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  .header {
+    margin-bottom: 2rem;
+    text-align: center;
+
+    h1 {
+      margin: 0 0 0.5rem 0;
+      font-size: 2rem;
+      font-weight: 500;
+    }
+
+    .subtitle {
+      color: rgba(0, 0, 0, 0.6);
+      margin: 0;
+    }
+  }
+
+  .loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    gap: 1rem;
+
+    p {
+      color: rgba(0, 0, 0, 0.6);
+    }
+  }
+
+  .error-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    gap: 1rem;
+    color: #d32f2f;
+
+    mat-icon {
+      font-size: 48px;
+      width: 48px;
+      height: 48px;
+    }
+  }
+
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    gap: 1rem;
+    text-align: center;
+
+    mat-icon {
+      font-size: 64px;
+      width: 64px;
+      height: 64px;
+      color: rgba(0, 0, 0, 0.3);
+    }
+
+    h2 {
+      margin: 0;
+      font-weight: 500;
+    }
+
+    p {
+      color: rgba(0, 0, 0, 0.6);
+      margin: 0 0 1rem 0;
+    }
+  }
+
+  .users-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+
+    .user-card {
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s, box-shadow 0.2s;
+
+      &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      mat-card-header {
+        margin-bottom: 1rem;
+
+        .user-avatar {
+          width: 48px;
+          height: 48px;
+          border-radius: 50%;
+          overflow: hidden;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background-color: #f5f5f5;
+
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
+
+          mat-icon {
+            font-size: 48px;
+            width: 48px;
+            height: 48px;
+            color: rgba(0, 0, 0, 0.3);
+          }
+        }
+      }
+
+      mat-card-content {
+        flex: 1;
+
+        .shared-books-info {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          margin-bottom: 1rem;
+          color: rgba(0, 0, 0, 0.7);
+          font-weight: 500;
+
+          mat-icon {
+            font-size: 20px;
+            width: 20px;
+            height: 20px;
+          }
+        }
+
+        .shared-books-list {
+          h3 {
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin: 0 0 0.5rem 0;
+            color: rgba(0, 0, 0, 0.6);
+          }
+
+          .books-chips {
+            mat-chip-set {
+              display: flex;
+              flex-wrap: wrap;
+            }
+
+            .book-chip {
+              cursor: pointer;
+              transition: background-color 0.2s;
+
+              &:hover {
+                background-color: rgba(0, 0, 0, 0.08);
+              }
+
+              .book-cover-small {
+                width: 20px;
+                height: 28px;
+                object-fit: cover;
+                border-radius: 2px;
+                margin-right: 0.5rem;
+              }
+
+              span {
+                max-width: 150px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+              }
+            }
+
+            .more-chip {
+              background-color: rgba(0, 0, 0, 0.05);
+              font-weight: 500;
+            }
+          }
+        }
+      }
+
+      mat-card-actions {
+        padding: 1rem;
+        margin: 0;
+        border-top: 1px solid rgba(0, 0, 0, 0.12);
+
+        button {
+          mat-icon {
+            margin-right: 0.5rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .find-friends-container {
+    padding: 1rem;
+
+    .users-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+}

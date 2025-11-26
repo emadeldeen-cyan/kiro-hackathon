@@ -7,6 +7,7 @@ import { BookDetailComponent } from './features/books/book-detail/book-detail.co
 import { ProfileView } from './features/profile/profile-view/profile-view';
 import { ProfileForm } from './features/profile/profile-form/profile-form';
 import { UserReviews } from './features/reviews/user-reviews/user-reviews';
+import { FindFriendsComponent } from './features/friends/find-friends/find-friends.component';
 import { authGuard } from './core/guards/auth.guard';
 import { AppLayoutComponent } from './shared/layout/app-layout.component';
 
@@ -55,6 +56,10 @@ export const routes: Routes = [
       { 
         path: 'reviews/my-reviews', 
         component: UserReviews 
+      },
+      { 
+        path: 'friends/find', 
+        component: FindFriendsComponent 
       }
     ]
   },
