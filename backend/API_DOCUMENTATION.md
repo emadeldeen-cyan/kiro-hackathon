@@ -2,8 +2,27 @@
 
 ## Base URL
 ```
-http://localhost:3000/api
+Development: http://localhost:3000/api
+Production: Update based on your deployment
 ```
+
+## Quick Start
+
+1. **Start the server**: `npm run dev`
+2. **Register a user**: `POST /api/auth/register`
+3. **Login**: `POST /api/auth/login` (receive JWT token)
+4. **Use token**: Include `Authorization: Bearer <token>` header in all subsequent requests
+
+## CORS Configuration
+
+The API supports Cross-Origin Resource Sharing (CORS) for frontend integration:
+
+- **Allowed Origins**: Configured via `FRONTEND_URL` environment variable
+- **Credentials**: Enabled (supports cookies and authorization headers)
+- **Methods**: GET, POST, PUT, DELETE, OPTIONS
+- **Headers**: Content-Type, Authorization
+
+For detailed frontend integration instructions, see [FRONTEND_INTEGRATION.md](./FRONTEND_INTEGRATION.md).
 
 ## Authentication
 
@@ -12,6 +31,8 @@ All endpoints except `/auth/register` and `/auth/login` require authentication v
 ```
 Authorization: Bearer <token>
 ```
+
+**Token Expiration**: Tokens expire after 24 hours (configurable via `JWT_EXPIRES_IN` environment variable)
 
 ---
 
@@ -512,3 +533,66 @@ All error responses follow this format:
 - `409` - Conflict (duplicate resource or validation error)
 - `500` - Internal Server Error
 - `503` - Service Unavailable (external API error)
+
+---
+
+## Testing the API
+
+### Using cURL
+
+**Health Check:**
+```bash
+curl http://localhost:3000/health
+```
+
+**Register User:**
+```bash
+curl -X POST http://localhost:3000/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"username":"testuser","email":"test@example.com","password":"password123"}'
+```
+
+**Login:**
+```bash
+curl -X POST http://localhost:3000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"username":"testuser","password":"password123"}'
+```
+
+**Authenticated Request (replace TOKEN with actual token):**
+```bash
+curl http://localhost:3000/api/profiles/USER_ID \
+  -H "Authorization: Bearer TOKEN"
+```
+
+### Using Postman
+
+1. Import the API endpoints into Postman
+2. Set base URL: `http://localhost:3000/api`
+3. For authenticated requests:
+   - Go to Authorization tab
+   - Select "Bearer Token"
+   - Paste your JWT token
+
+### Using Browser DevTools
+
+```javascript
+// In browser console
+fetch('http://localhost:3000/api/auth/login', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    username: 'testuser',
+    password: 'password123'
+  })
+})
+.then(r => r.json())
+.then(data => console.log(data));
+```
+
+---
+
+## Additional Resources
+
+- [Frontend Integration Guide](./FRONTEND_INTEGRATION.md) - Detailed guide for integrating with frontend applications
+- [README](./README.md) - Backend setup and development guide
