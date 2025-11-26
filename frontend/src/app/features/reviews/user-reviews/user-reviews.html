@@ -1,0 +1,35 @@
+<div class="user-reviews-container">
+  <h1>My Reviews</h1>
+
+  <div *ngIf="isLoading" class="loading-container">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <div *ngIf="errorMessage && !isLoading" class="error-message">
+    <mat-card>
+      <mat-card-content>
+        {{ errorMessage }}
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div *ngIf="!isLoading && !errorMessage && reviews.length === 0" class="empty-state">
+    <mat-card>
+      <mat-card-content>
+        <p>You haven't written any reviews yet.</p>
+        <p>Start exploring books and share your thoughts!</p>
+        <a routerLink="/books/search" mat-raised-button color="primary">Search Books</a>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div *ngIf="!isLoading && reviews.length > 0" class="reviews-list">
+    <app-review-card
+      *ngFor="let review of reviews"
+      [review]="review"
+      [showBookInfo]="true"
+      (editClicked)="onEditReview($event)"
+      (deleteClicked)="onDeleteReview($event)">
+    </app-review-card>
+  </div>
+</div>

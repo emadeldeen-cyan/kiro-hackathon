@@ -1,0 +1,240 @@
+.book-detail-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  .loading-container {
+    display: flex;
+    justify-content: center;
+    padding: 4rem;
+  }
+
+  .error-message {
+    color: #d32f2f;
+    padding: 1rem;
+    background-color: #ffebee;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 1.1rem;
+  }
+
+  .book-detail {
+    .book-header {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+
+      .book-cover-section {
+        .book-cover {
+          width: 100%;
+          height: auto;
+          max-height: 450px;
+          object-fit: cover;
+          border-radius: 8px;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+          background-color: #f5f5f5;
+        }
+      }
+
+      .book-info-section {
+        .book-title {
+          font-size: 2rem;
+          font-weight: 600;
+          margin: 0 0 0.5rem 0;
+          color: #333;
+        }
+
+        .book-author {
+          font-size: 1.5rem;
+          font-weight: 400;
+          margin: 0 0 1.5rem 0;
+          color: #666;
+        }
+
+        .book-metadata {
+          margin-bottom: 1.5rem;
+
+          .metadata-item {
+            margin: 0.5rem 0;
+            color: #555;
+            font-size: 0.95rem;
+
+            strong {
+              color: #333;
+            }
+          }
+        }
+
+        .rating-section {
+          margin-bottom: 1.5rem;
+          padding: 1rem;
+          background-color: #f9f9f9;
+          border-radius: 8px;
+
+          .average-rating {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+
+            .rating-stars {
+              font-size: 1.5rem;
+              color: #ff9800;
+            }
+
+            .rating-text {
+              font-size: 1.25rem;
+              font-weight: 500;
+              color: #333;
+            }
+          }
+
+          .review-count {
+            margin: 0;
+            color: #666;
+            font-size: 0.95rem;
+          }
+
+          .no-reviews {
+            margin: 0;
+            color: #666;
+            font-style: italic;
+          }
+        }
+
+        .action-buttons {
+          display: flex;
+          gap: 1rem;
+          flex-wrap: wrap;
+
+          button {
+            padding: 0.5rem 2rem;
+          }
+        }
+      }
+    }
+
+    mat-divider {
+      margin: 2rem 0;
+    }
+
+    .book-description {
+      margin-bottom: 2rem;
+
+      h3 {
+        font-size: 1.5rem;
+        font-weight: 500;
+        margin: 0 0 1rem 0;
+        color: #333;
+      }
+
+      p {
+        line-height: 1.6;
+        color: #555;
+        font-size: 1rem;
+      }
+    }
+
+    .reviews-section {
+      h3 {
+        font-size: 1.5rem;
+        font-weight: 500;
+        margin: 0 0 1.5rem 0;
+        color: #333;
+      }
+
+      .no-reviews-message {
+        text-align: center;
+        padding: 2rem;
+        color: #666;
+        font-style: italic;
+      }
+
+      .reviews-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+
+        .review-card {
+          mat-card-content {
+            .review-header {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              margin-bottom: 1rem;
+
+              .review-rating {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+
+                .rating-stars {
+                  font-size: 1.25rem;
+                  color: #ff9800;
+                }
+
+                .rating-number {
+                  font-weight: 500;
+                  color: #333;
+                }
+              }
+
+              .review-meta {
+                .review-date {
+                  color: #999;
+                  font-size: 0.9rem;
+                }
+              }
+            }
+
+            .review-text {
+              line-height: 1.6;
+              color: #555;
+              margin: 0 0 1rem 0;
+            }
+
+            .review-footer {
+              .reviewer-info {
+                color: #666;
+                font-size: 0.9rem;
+                font-style: italic;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .book-detail-container {
+    padding: 1rem;
+
+    .book-detail {
+      .book-header {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+
+        .book-cover-section {
+          .book-cover {
+            max-width: 300px;
+            margin: 0 auto;
+            display: block;
+          }
+        }
+
+        .book-info-section {
+          .book-title {
+            font-size: 1.5rem;
+          }
+
+          .book-author {
+            font-size: 1.25rem;
+          }
+        }
+      }
+    }
+  }
+}

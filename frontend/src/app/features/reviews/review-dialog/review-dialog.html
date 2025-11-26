@@ -1,0 +1,10 @@
+<h2 mat-dialog-title>Edit Review</h2>
+<mat-dialog-content>
+  <app-review-form
+    [bookId]="data.bookId"
+    [existingReview]="data.review"
+    [mode]="'edit'"
+    (reviewSubmitted)="onReviewSubmitted($event)"
+    (cancelled)="onCancelled()">
+  </app-review-form>
+</mat-dialog-content>

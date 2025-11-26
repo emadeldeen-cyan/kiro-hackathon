@@ -254,7 +254,7 @@
 
 ## Frontend Tasks
 
-- [ ] 12. Set up Angular project structure
+- [x] 12. Set up Angular project structure
   - Initialize Angular project in frontend directory with TypeScript
   - Configure Angular routing
   - Install required dependencies (HttpClient, Angular Material or Bootstrap, etc.)
@@ -263,20 +263,20 @@
   - Set up proxy configuration for development
   - _Requirements: All_
 
-- [ ] 13. Implement authentication services and guards
-- [ ] 13.1 Create authentication service
+- [x] 13. Implement authentication services and guards
+- [x] 13.1 Create authentication service
   - Create AuthService with login, register, and logout methods
   - Implement JWT token storage in localStorage
   - Add methods to check authentication status
   - Create HTTP interceptor to attach JWT token to requests
   - _Requirements: 1.1_
 
-- [ ] 13.2 Create authentication guard
+- [x] 13.2 Create authentication guard
   - Implement AuthGuard to protect routes
   - Redirect unauthenticated users to login page
   - _Requirements: 1.1_
 
-- [ ] 13.3 Create registration component
+- [x] 13.3 Create registration component
   - Generate registration component with Angular CLI
   - Build reactive form with username, email, and password fields
   - Add form validators for password length (min 8 characters)
@@ -284,7 +284,7 @@
   - Handle and display error messages
   - _Requirements: 1.1, 1.2, 1.3, 1.4_
 
-- [ ] 13.4 Create login component
+- [x] 13.4 Create login component
   - Generate login component with Angular CLI
   - Build reactive form with username/email and password fields
   - Implement login API call using AuthService
@@ -292,13 +292,13 @@
   - Handle and display error messages
   - _Requirements: 1.1_
 
-- [ ] 14. Implement profile management
-- [ ] 14.1 Create profile service
+- [x] 14. Implement profile management
+- [x] 14.1 Create profile service
   - Create ProfileService with methods for create, update, and get profile
   - Implement API calls using HttpClient
   - _Requirements: 2.1, 2.2, 2.3_
 
-- [ ] 14.2 Create profile form component
+- [x] 14.2 Create profile form component
   - Generate profile-form component with Angular CLI
   - Build reactive form with display name, bio, and avatar URL fields
   - Add form validators for display name length (max 100 characters)
@@ -306,7 +306,7 @@
   - Handle and display error messages
   - _Requirements: 2.1, 2.2, 2.4_
 
-- [ ] 14.3 Create profile view component
+- [x] 14.3 Create profile view component
   - Generate profile component with Angular CLI
   - Display user profile information
   - Show user's reviews on profile page using ReviewService
@@ -314,13 +314,13 @@
   - Implement route parameter to view any user's profile
   - _Requirements: 2.3, 6.1, 6.2_
 
-- [ ] 15. Implement book search and management
-- [ ] 15.1 Create book service
+- [x] 15. Implement book search and management
+- [x] 15.1 Create book service
   - Create BookService with methods for OpenLibrary search, add book, get book, and local search
   - Implement API calls using HttpClient
   - _Requirements: 3.1, 3.2, 3.3, 7.1_
 
-- [ ] 15.2 Create OpenLibrary search component
+- [x] 15.2 Create OpenLibrary search component
   - Generate book-search component with Angular CLI
   - Build search form with input field
   - Implement search on submit or with debounce for real-time search
@@ -329,14 +329,14 @@
   - Add "Add to Library" button for each result
   - _Requirements: 3.1_
 
-- [ ] 15.3 Implement add book functionality
+- [x] 15.3 Implement add book functionality
   - Handle "Add to Library" button click in search component
   - Call BookService to add book from OpenLibrary
   - Show success toast or existing book notification
   - Navigate to book detail page after adding
   - _Requirements: 3.2, 3.3, 3.4, 3.5_
 
-- [ ] 15.4 Create local book search component
+- [x] 15.4 Create local book search component
   - Generate local-books component with Angular CLI
   - Build search form for local database
   - Display local search results with covers and average ratings
@@ -344,7 +344,7 @@
   - Add router links to book detail pages
   - _Requirements: 7.1, 7.2, 7.3, 7.4_
 
-- [ ] 15.5 Create book detail component
+- [x] 15.5 Create book detail component
   - Generate book-detail component with Angular CLI
   - Get book ID from route parameters
   - Display complete book information (title, author, ISBN, description, cover)
@@ -353,13 +353,13 @@
   - Display average rating and review count
   - _Requirements: 3.5, 4.4_
 
-- [ ] 16. Implement review management
-- [ ] 16.1 Create review service
+- [x] 16. Implement review management
+- [x] 16.1 Create review service
   - Create ReviewService with methods for create, update, delete, get by book, and get by user
   - Implement API calls using HttpClient
   - _Requirements: 4.1, 5.1, 5.2, 6.1_
 
-- [ ] 16.2 Create review form component
+- [x] 16.2 Create review form component
   - Generate review-form component with Angular CLI
   - Build reactive form with rating selector (1-5 stars) and text area
   - Add form validators for rating range (1-5)
@@ -368,7 +368,7 @@
   - Handle and display error messages
   - _Requirements: 4.1, 4.2, 5.1_
 
-- [ ] 16.3 Create review card component
+- [x] 16.3 Create review card component
   - Generate review-card component with Angular CLI
   - Display review rating as stars
   - Show review text and timestamp (use date pipe)
@@ -377,7 +377,7 @@
   - Emit events for edit and delete actions
   - _Requirements: 4.4_
 
-- [ ] 16.4 Implement review edit and delete functionality
+- [x] 16.4 Implement review edit and delete functionality
   - Create edit review dialog/modal using Angular Material Dialog or Bootstrap Modal
   - Implement delete confirmation dialog
   - Call ReviewService update/delete methods
@@ -385,7 +385,7 @@
   - Update UI after successful operations (refresh review list)
   - _Requirements: 5.1, 5.2, 5.3, 5.4_
 
-- [ ] 16.5 Create user reviews component
+- [x] 16.5 Create user reviews component
   - Generate my-reviews component with Angular CLI
   - Display all reviews by the current user using ReviewService
   - Show associated book information for each review

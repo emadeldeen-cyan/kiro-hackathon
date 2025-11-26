@@ -1,0 +1,45 @@
+<div class="local-books-container">
+  <h1>My Library</h1>
+  
+  <mat-form-field appearance="outline" class="search-field">
+    <mat-label>Search your library</mat-label>
+    <input 
+      matInput 
+      [formControl]="searchControl" 
+      placeholder="Search by title or author"
+      type="text">
+  </mat-form-field>
+
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+
+  <div *ngIf="isLoading" class="loading-container">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <div *ngIf="!isLoading && books.length > 0" class="books-container">
+    <div class="books-grid">
+      <mat-card 
+        *ngFor="let book of books" 
+        class="book-card"
+        (click)="viewBookDetails(book.id)">
+        <img 
+          mat-card-image 
+          [src]="getCoverImageUrl(book.coverImageUrl)" 
+          [alt]="book.title"
+          class="book-cover">
+        <mat-card-content>
+          <h3 class="book-title">{{ book.title }}</h3>
+          <p class="book-author">{{ book.author }}</p>
+          <p class="book-rating">{{ getStarRating(book.averageRating) }}</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoading && books.length === 0 && !errorMessage" class="no-results">
+    <p *ngIf="searchControl.value">No books found matching "{{ searchControl.value }}".</p>
+    <p *ngIf="!searchControl.value">Your library is empty. Start by searching for books in OpenLibrary!</p>
+  </div>
+</div>

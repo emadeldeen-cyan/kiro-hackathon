@@ -1,0 +1,82 @@
+<div class="profile-container">
+  <div *ngIf="isLoading" class="loading">
+    Loading profile...
+  </div>
+
+  <div *ngIf="errorMessage && !isLoading" class="error-message">
+    {{ errorMessage }}
+  </div>
+
+  <div *ngIf="profile && !isLoading">
+    <!-- Profile Card -->
+    <mat-card class="profile-card">
+      <mat-card-header>
+        <div class="profile-header">
+          <img 
+            *ngIf="profile.avatarUrl" 
+            [src]="profile.avatarUrl" 
+            alt="Profile avatar"
+            class="avatar"
+          />
+          <div *ngIf="!profile.avatarUrl" class="avatar-placeholder">
+            <mat-icon>person</mat-icon>
+          </div>
+          <div class="profile-info">
+            <mat-card-title>{{ profile.displayName }}</mat-card-title>
+            <mat-card-subtitle *ngIf="profile.bio">{{ profile.bio }}</mat-card-subtitle>
+          </div>
+        </div>
+      </mat-card-header>
+      
+      <mat-card-actions *ngIf="isOwnProfile">
+        <button mat-raised-button color="primary" (click)="onEditProfile()">
+          <mat-icon>edit</mat-icon>
+          Edit Profile
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+    <!-- Reviews Section -->
+    <div class="reviews-section">
+      <h2>Reviews ({{ reviews.length }})</h2>
+      
+      <div *ngIf="reviews.length === 0" class="no-reviews">
+        <p>No reviews yet.</p>
+      </div>
+
+      <div class="reviews-list">
+        <mat-card *ngFor="let review of reviews" class="review-card">
+          <mat-card-header>
+            <div class="review-header">
+              <a [routerLink]="['/books', review.bookId]" class="book-link">
+                <img 
+                  *ngIf="review.book.coverImageUrl" 
+                  [src]="review.book.coverImageUrl" 
+                  alt="Book cover"
+                  class="book-cover"
+                />
+                <div class="book-info">
+                  <h3>{{ review.book.title }}</h3>
+                  <p class="author">by {{ review.book.author }}</p>
+                </div>
+              </a>
+            </div>
+          </mat-card-header>
+          
+          <mat-card-content>
+            <div class="rating">
+              <mat-icon 
+                *ngFor="let star of getStarArray(review.rating)" 
+                [class.filled]="star === 1"
+              >
+                {{ star === 1 ? 'star' : 'star_border' }}
+              </mat-icon>
+            </div>
+            <p class="review-text">{{ review.text }}</p>
+            <p class="review-date">{{ review.createdAt | date:'medium' }}</p>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,41 @@
+<mat-card class="review-card">
+  <mat-card-header>
+    <div class="review-header">
+      <div class="review-info">
+        <div class="rating">
+          <span *ngFor="let star of stars" class="star" [class.filled]="isStarFilled(star)">
+            ★
+          </span>
+        </div>
+        <div class="reviewer-info">
+          <span *ngIf="reviewerName" class="reviewer-name">
+            <a [routerLink]="['/profile', review.userId]">{{ reviewerName }}</a>
+          </span>
+          <span class="review-date">{{ review.createdAt | date:'medium' }}</span>
+          <span *ngIf="review.updatedAt !== review.createdAt" class="edited-label">(edited)</span>
+        </div>
+      </div>
+      <div class="actions" *ngIf="isOwner">
+        <button mat-icon-button (click)="onEdit()" aria-label="Edit review">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button (click)="onDelete()" aria-label="Delete review">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div *ngIf="showBookInfo && bookInfo" class="book-info">
+      <a [routerLink]="['/books', bookInfo.id]" class="book-link">
+        <img *ngIf="bookInfo.coverImageUrl" [src]="bookInfo.coverImageUrl" [alt]="bookInfo.title" class="book-cover">
+        <div class="book-details">
+          <h4>{{ bookInfo.title }}</h4>
+          <p>by {{ bookInfo.author }}</p>
+        </div>
+      </a>
+    </div>
+    <p class="review-text">{{ review.text }}</p>
+  </mat-card-content>
+</mat-card>
