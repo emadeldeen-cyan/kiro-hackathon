@@ -37,3 +37,21 @@ export interface UpdateProfileDTO {
   bio?: string;
   avatarUrl?: string;
 }
+
+// OpenLibrary data types
+export interface OpenLibrarySearchResult {
+  key: string; // e.g., "/works/OL45804W"
+  title: string;
+  author_name?: string[];
+  first_publish_year?: number;
+  isbn?: string[];
+  cover_i?: number; // cover image ID
+}
+
+export interface OpenLibraryBook {
+  key: string;
+  title: string;
+  description?: string | { value: string };
+  authors?: Array<{ author: { key: string } }>;
+  covers?: number[];
+}
